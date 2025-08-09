@@ -1,0 +1,31 @@
+spring.application.name=inkluziv
+server.port=8000
+
+spring.data.mongodb.uri=mongodb+srv://<da_username:<dc_password>@inkluziv.vvlocrl.mongodb.net/?retryWrites=true&w=majority&appName=inkluziv
+spring.data.mongodb.database=
+
+spring.mail.host=smtp.gmail.com
+spring.mail.port=587
+spring.mail.username=enter you gmail
+spring.mail.password=enter your app password
+spring.mail.protocol=smtp
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+spring.mail.properties.mail.smtp.starttls.required=true
+spring.mail.properties.mail.smtp.connectiontimeout=10000
+spring.mail.properties.mail.smtp.timeout=10000
+spring.mail.properties.mail.smtp.writetimeout=10000
+
+voice.ml.service.url=enter the python microservice url here
+
+RESET_JWT_SECRET=generate it
+RESET_JWT_EXPIRATION=120000
+
+CLOUDINARY_CLOUD_NAME=enter your cloudinary name
+CLOUDINARY_API_KEY=enter your api key
+CLOUDINARY_API_SECRET=enter your secret key
+
+spring.security.oauth2.client.registration.google.client-id=enter your google id
+spring.security.oauth2.client.registration.google.client-secret=enter your google secret key
+spring.security.oauth2.client.registration.google.redirect-uri=http://localhost:8000/login/oauth2/code/google
+spring.security.oauth2.client.registration.google.scope=openid,email,profile
