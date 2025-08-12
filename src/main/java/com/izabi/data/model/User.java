@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,10 +25,14 @@ public class User implements UserDetails {
     @Id
     private String id;
     private String firstName;
+
+    @Indexed(unique = true)
     private String email;
     private String password;
     private String phoneNumber;
     private String lastName;
+    private String institution;
+    private String major;
     private String location;
     private String voicePrint;
     private boolean voiceAuthEnabled;
