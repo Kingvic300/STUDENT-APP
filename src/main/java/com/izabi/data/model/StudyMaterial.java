@@ -33,11 +33,14 @@ public class StudyMaterial {
     private String courseName;
     private ContentType contentType;
     private List<String> tags;
+
     @Indexed
     private LocalDateTime uploadDate;
+
     private ProcessingStatus processingStatus;
     private String aiAnalysisStatus;
     private boolean isSearchable;
+
     @Indexed
     private String uploadedBy;
     private boolean isFavorite;

@@ -1,13 +1,14 @@
 package com.izabi.service;
 
+import com.izabi.dto.response.*;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface FileTextExtractionService {
 
-    String getFileExtension(MultipartFile file);
+    FileExtensionResponse getFileExtension(MultipartFile file);
 
-    String navigateToProperFileExtension(MultipartFile file);
+    ReadDocumentResponse navigateToProperFileExtension(MultipartFile file);
 
-    int getPageCount(MultipartFile file);
+    PageCountResponse getPageCount(MultipartFile file);
 
 }

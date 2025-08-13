@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -22,5 +23,6 @@ public class StudyQuestionDTO {
     private String difficulty;
     private double aiConfidence;
     private int timesAnswered;
+    private LocalDateTime createdAt;
     private double successRate;
 }
