@@ -82,7 +82,7 @@ public class EmailServiceImpl implements EmailService {
                         <p>This OTP is valid for <strong>%d minutes</strong>.</p>
                         <p>If you did not request this, you can safely ignore this email.</p>
                         <br/>
-                        <p>Regards,<br/>SkillNest Team</p>
+                        <p>Regards,<br/>IZABI Team</p>
                     </div>
                 </body>
                 </html>
@@ -105,7 +105,7 @@ public class EmailServiceImpl implements EmailService {
                         <p>This code will expire in <strong>%d minutes</strong>.</p>
                         <p>If you didn't request this, ignore this email.</p>
                         <br/>
-                        <p>Regards,<br/>SkillNest Security</p>
+                        <p>Regards,<br/>IZABI Security</p>
                     </div>
                 </body>
                 </html>

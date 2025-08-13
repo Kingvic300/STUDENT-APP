@@ -1,8 +1,10 @@
 package com.izabi.service;
 
-import com.izabi.exception.FileExtensionNotSupportedException;
+import com.izabi.dto.response.*;
+import com.izabi.mapper.StudyMaterialMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import com.izabi.exception.*;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -17,21 +19,27 @@ import java.nio.charset.StandardCharsets;
 public class FileTextExtractionServiceImpl implements FileTextExtractionService {
 
     @Override
-    public String getFileExtension(MultipartFile file) {
+    public FileExtensionResponse getFileExtension(MultipartFile file) {
         String filename = file.getOriginalFilename();
-        if (filename == null) return "";
+        String extension;
+
+        if (filename == null) {
+            throw new NoFileFoundException("File cannot be null");
+        }
 
         int lastIndex = filename.lastIndexOf('.');
         if (lastIndex == -1) {
-            return "";
+            throw new NoFileExtensionFoundException("No file extension found");
         } else {
-            return filename.substring(lastIndex + 1).toLowerCase();
+            extension = filename.substring(lastIndex + 1).toLowerCase();
         }
+        return StudyMaterialMapper.mapToFileExtensionResponse(extension, "file extension found ");
     }
 
     @Override
-    public String navigateToProperFileExtension(MultipartFile file) {
-        String extension = getFileExtension(file);
+    public ReadDocumentResponse navigateToProperFileExtension(MultipartFile file) {
+        FileExtensionResponse fileExtension = getFileExtension(file);
+        String extension = fileExtension.getFileExtension();
 
         return switch (extension) {
             case "txt", "csv" -> readTextFile(file);
@@ -43,9 +51,9 @@ public class FileTextExtractionServiceImpl implements FileTextExtractionService 
     }
 
     @Override
-    public int getPageCount(MultipartFile file) {
-        String extension = getFileExtension(file);
-
+    public PageCountResponse getPageCount(MultipartFile file) {
+        FileExtensionResponse fileExtension = getFileExtension(file);
+        String extension = fileExtension.getFileExtension();
         try {
             return switch (extension) {
                 case "txt", "csv" -> getTextFilePageCount(file);
@@ -59,31 +67,31 @@ public class FileTextExtractionServiceImpl implements FileTextExtractionService 
         }
     }
 
-    private int getExcelSheetCount(MultipartFile file) {
+    private PageCountResponse getExcelSheetCount(MultipartFile file) {
         try (Workbook workbook = WorkbookFactory.create(file.getInputStream())) {
-            return workbook.getNumberOfSheets();
+            return StudyMaterialMapper.mapToPageCountResponse(workbook.getNumberOfSheets(),"Page was counted Successfully");
         } catch (Exception e) {
             throw new FileExtensionNotSupportedException("FILE NOT SUPPORTED: " + e.getMessage());
         }
     }
 
-    private int getWordPageCount(MultipartFile file) {
+    private PageCountResponse getWordPageCount(MultipartFile file) {
         try (XWPFDocument document = new XWPFDocument(file.getInputStream())) {
-            return document.getParagraphs().size();
+            return StudyMaterialMapper.mapToPageCountResponse(document.getParagraphs().size(),"Page was counted Successfully");
         } catch (Exception e) {
             throw new FileExtensionNotSupportedException("FILE NOT SUPPORTED: " + e.getMessage());
         }
     }
 
-    private int getPDFPageCount(MultipartFile file) {
+    private PageCountResponse getPDFPageCount(MultipartFile file) {
         try (PDDocument document = PDDocument.load(file.getInputStream())) {
-            return document.getNumberOfPages();
+            return StudyMaterialMapper.mapToPageCountResponse(document.getNumberOfPages(),"Page was counted Successfully");
         } catch (Exception e) {
             throw new FileExtensionNotSupportedException("FILE NOT SUPPORTED: " + e.getMessage());
         }
     }
 
-    private int getTextFilePageCount(MultipartFile file) throws Exception {
+    private PageCountResponse getTextFilePageCount(MultipartFile file) throws Exception {
         int linesPerPage = 50;
         double lines = 0;
         try (BufferedReader reader = new BufferedReader(
@@ -93,10 +101,11 @@ public class FileTextExtractionServiceImpl implements FileTextExtractionService 
             }
         }
         double division = lines /linesPerPage;
-        return (int) Math.ceil(division);
+        int result = (int) Math.ceil(division);
+        return StudyMaterialMapper.mapToPageCountResponse(result,"Page was counted Successfully");
     }
 
-    private String readExcelFile(MultipartFile file) {
+    private ReadDocumentResponse readExcelFile(MultipartFile file) {
         StringBuilder content = new StringBuilder();
         try (Workbook workbook = WorkbookFactory.create(file.getInputStream())) {
             for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
@@ -110,31 +119,34 @@ public class FileTextExtractionServiceImpl implements FileTextExtractionService 
             }
         } catch (Exception e) {
             log.error("Error reading Excel file: {}", e.getMessage(), e);
+            throw new DocumentNotReadException("Error while reading study material");
+
         }
-        return content.toString();
+        return StudyMaterialMapper.mapToReadDocumentResponse(content.toString(), "Excel file was read successfully");
     }
 
-    private String readWordDocument(MultipartFile file) {
+    private ReadDocumentResponse readWordDocument(MultipartFile file) {
         StringBuilder content = new StringBuilder();
         try (XWPFDocument document = new XWPFDocument(file.getInputStream())) {
             document.getParagraphs().forEach(p -> content.append(p.getText()).append("\n"));
         } catch (Exception e) {
             log.error("Error reading Word document: {}", e.getMessage(), e);
+            throw new DocumentNotReadException("Error while reading study material");
         }
-        return content.toString();
+        return StudyMaterialMapper.mapToReadDocumentResponse(content.toString(), "Doc was read successfully");
     }
 
-    private String readPDF(MultipartFile file) {
+    private ReadDocumentResponse readPDF(MultipartFile file) {
         try (PDDocument document = PDDocument.load(file.getInputStream())) {
             PDFTextStripper stripper = new PDFTextStripper();
-            return stripper.getText(document);
+            return StudyMaterialMapper.mapToReadDocumentResponse(stripper.getText(document), "PDF was read successfully");
         } catch (Exception e) {
             log.error("Error reading PDF file: {}", e.getMessage(), e);
-            return "";
+            throw new DocumentNotReadException("Error while reading study material");
         }
     }
 
-    private String readTextFile(MultipartFile file) {
+    private ReadDocumentResponse readTextFile(MultipartFile file) {
         StringBuilder content = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
@@ -144,7 +156,9 @@ public class FileTextExtractionServiceImpl implements FileTextExtractionService 
             }
         } catch (Exception e) {
             log.error("Error reading text file: {}", e.getMessage(), e);
+            throw new DocumentNotReadException("Error while reading study material");
+
         }
-        return content.toString();
+        return StudyMaterialMapper.mapToReadDocumentResponse(content.toString(), "text file was read successfully");
     }
 }
