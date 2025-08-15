@@ -1,5 +1,7 @@
-package com.izabi.dto;
+package com.izabi.dto.response;
 
+import com.izabi.data.enums.Difficulty;
+import com.izabi.data.enums.QuestionType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,17 +14,14 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class StudyQuestionDTO {
+public class StudyQuestionResponse {
     private String id;
     private String question;
-    private String questionType;
+    private QuestionType questionType;
     private List<String> options;
     private String correctAnswer;
     private String explanation;
     private String topic;
-    private String difficulty;
-    private double aiConfidence;
-    private int timesAnswered;
+    private Difficulty difficulty;
     private LocalDateTime createdAt;
-    private double successRate;
 }

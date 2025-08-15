@@ -1,9 +1,14 @@
 package com.izabi.service;
 
-import com.izabi.dto.StudyQuestionDTO;
+import com.izabi.dto.response.StudyQuestionResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface QuestionGenerationService {
-    List<StudyQuestionDTO> generateQuestionsFromFile(String fileId, String extractedText);
+    List<StudyQuestionResponse> generateQuestionsFromFile(String fileId, MultipartFile file);
+
+    List<StudyQuestionResponse> findQuestions(String fileId);
+
+    boolean deleteQuestions(String fileId);
 }

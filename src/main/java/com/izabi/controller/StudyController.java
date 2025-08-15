@@ -1,6 +1,6 @@
 package com.izabi.controller;
 
-import com.izabi.dto.StudyMaterialDTO;
+import com.izabi.dto.request.StudyMaterialRequest;
 import com.izabi.service.StudyAppService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ public class StudyController {
     private final StudyAppService studyAppService;
 
     @PostMapping("/generate")
-    public ResponseEntity<StudyMaterialDTO> generateStudyMaterial(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<StudyMaterialRequest> generateStudyMaterial(@RequestParam("file") MultipartFile file) {
         log.info("Received file for study material generation: {}", file.getOriginalFilename());
 
         if (file.isEmpty()) {
@@ -26,7 +26,7 @@ public class StudyController {
         }
 
         try {
-            StudyMaterialDTO studyMaterial = studyAppService.generateStudyMaterial(file);
+            StudyMaterialRequest studyMaterial = studyAppService.generateStudyMaterial(file);
             return ResponseEntity.ok(studyMaterial);
         } catch (Exception e) {
             log.error("Error generating study material for file {}: {}", file.getOriginalFilename(), e.getMessage(), e);

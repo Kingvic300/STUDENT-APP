@@ -25,25 +25,20 @@ public class StudyMaterial {
     private int numberOfPages;
     private String extractedText;
     private String summary;
-    private List<String> keyTopics;
-    private List<String> keyTerms;
+    private List<String> keyPoints;
     private Difficulty difficulty;
-    private int estimatedReadingTimeMinutes;
     private String courseSubject;
     private String courseName;
     private ContentType contentType;
     private List<String> tags;
+    private boolean isActive;
 
     @Indexed
     private LocalDateTime uploadDate;
 
     private ProcessingStatus processingStatus;
-    private String aiAnalysisStatus;
-    private boolean isSearchable;
 
     @Indexed
     private String uploadedBy;
-    private boolean isFavorite;
-    private int viewCount;
     private LocalDateTime lastAccessedDate;
 }

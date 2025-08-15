@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface StudyQuestionRepository extends MongoRepository<StudyQuestion, String> {
-    List<StudyQuestion> findByPdfIdAndActive(String pdfId, boolean b);
+    List<StudyQuestion> findByStudyMaterialIdAndActive(String pdfId, boolean b);
 }
