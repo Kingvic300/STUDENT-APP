@@ -6,10 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FileExtensionResponse {
-    private String fileExtension;
+@Builder
+public class AnalyzedContentResponse {
+    private String analyzed;
     private String message;
 }

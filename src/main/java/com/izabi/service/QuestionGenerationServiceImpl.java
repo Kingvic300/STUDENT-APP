@@ -1,128 +1,91 @@
 package com.izabi.service;
 
-import com.izabi.dto.StudyQuestionDTO;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.izabi.data.model.Question;
+import com.izabi.dto.response.ReadDocumentResponse;
+import com.izabi.dto.response.StudyQuestionResponse;
+import com.izabi.data.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class QuestionGenerationServiceImpl implements QuestionGenerationService {
 
+    private final AIService AIService;
     private final FileTextExtractionService fileTextExtractionService;
-    private final OpenAIService openAIService;
+    private final QuestionRepository questionRepository;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public List<StudyQuestionDTO> generateQuestionsFromFile(String fileId, String extractedText) {
-        String questionsToGenerate;
-        if (extractedText.length() > 3000) {
-            questionsToGenerate = extractedText.substring(0, 3000) + "...";
-        } else {
-            questionsToGenerate = extractedText;
-        }
-        log.info("Generating questions for fileId: {}", fileId);
-
-        String prompt = String.format("""
-                You are an educational assistant.
-                Based on the following content, generate a list of study questions with the following JSON format:
-
-                [
-                  {
-                    "question": "string",
-                    "options": ["option1", "option2", "option3", "option4"],
-                    "answer": "string",
-                    "difficulty": "BEGINNER|INTERMEDIATE|ADVANCED",
-                    "questionType": "MULTIPLE_CHOICE|TRUE_FALSE|SHORT_ANSWER"
-                  }
-                ]
-
-                Content:
-                %s
-                """, questionsToGenerate);
-
-        Map<String, Object> aiResponse = openAIService.analyzeContent(prompt);
-
-        List<StudyQuestionDTO> questions = new ArrayList<>();
+    public List<StudyQuestionResponse> generateQuestionsFromFile(String fileId, MultipartFile file) {
         try {
-            Object questionsObj = aiResponse.get("questions");
-            if (!(questionsObj instanceof List)) {
-                log.warn("Questions field is missing or not a list in AI response");
-                return questions;
-            }
+            ReadDocumentResponse readResponse = fileTextExtractionService.navigateToProperFileExtension(file);
+            String extractedText = readResponse.getText();
 
-            @SuppressWarnings("unchecked")
-            List<Map<String, Object>> questionList = (List<Map<String, Object>>) questionsObj;
+            String aiResponse = AIService.generateQuestions(extractedText);
 
-            for (Map<String, Object> q : questionList) {
-                StudyQuestionDTO dto = parseSingleQuestion(q);
-                if (dto != null) {
-                    questions.add(dto);
-                }
-            }
+            List<StudyQuestionResponse> studyQuestions = objectMapper.readValue(
+                    aiResponse,
+                    new TypeReference<>() {
+                    }
+            );
+
+            List<Question> questionEntities = studyQuestions.stream()
+                    .map(sq -> Question.builder()
+                            .fileId(fileId)
+                            .question(sq.getQuestion())
+                            .options(sq.getOptions())
+                            .answer(sq.getCorrectAnswer())
+                            .difficulty(sq.getDifficulty())
+                            .questionType(sq.getQuestionType())
+                            .build()
+                    )
+                    .collect(Collectors.toList());
+
+            questionRepository.saveAll(questionEntities);
+
+            log.info("Saved {} questions for fileId {}", questionEntities.size(), fileId);
+            return studyQuestions;
         } catch (Exception e) {
-            log.error("Error parsing AI question generation response", e);
+            log.error("Failed to generate questions for fileId {}: {}", fileId, e.getMessage(), e);
+            throw new RuntimeException("Failed to generate questions", e);
         }
-
-        return questions;
     }
 
-    private StudyQuestionDTO parseSingleQuestion(Map<String, Object> q) {
-        try {
-            StudyQuestionDTO dto = new StudyQuestionDTO();
-            dto.setId(UUID.randomUUID().toString());
+    @Override
+    public List<StudyQuestionResponse> findQuestions(String fileId) {
+        return questionRepository.findByFileId(fileId).stream()
+                .map(q -> StudyQuestionResponse.builder()
+                        .id(q.getId())
+                        .question(q.getQuestion())
+                        .questionType(q.getQuestionType())
+                        .options(q.getOptions())
+                        .correctAnswer(q.getAnswer())
+                        .explanation(null)
+                        .topic(null)
+                        .difficulty(q.getDifficulty())
+                        .createdAt(LocalDateTime.now())
+                        .build()
+                )
+                .collect(Collectors.toList());
+    }
 
-            Object question = q.get("question");
-            if (question instanceof String) {
-                dto.setQuestion((String) question);
-            } else {
-                log.warn("Invalid or missing question field");
-                return null;
-            }
-
-            Object options = q.get("options");
-            if (options instanceof List) {
-                @SuppressWarnings("unchecked")
-                List<String> optionsList = (List<String>) options;
-                dto.setOptions(optionsList);
-            } else {
-                log.warn("Invalid or missing options field");
-                return null;
-            }
-
-            Object answer = q.get("answer");
-            if (answer instanceof String) {
-                dto.setCorrectAnswer((String) answer);
-            } else {
-                log.warn("Invalid or missing answer field");
-                return null;
-            }
-
-            Object difficulty = q.get("difficulty");
-            if (difficulty instanceof String) {
-                dto.setDifficulty((String) difficulty);
-            } else {
-                log.warn("Invalid or missing difficulty field");
-                return null;
-            }
-
-            Object questionType = q.get("questionType");
-            if (questionType instanceof String) {
-                dto.setQuestionType((String) questionType);
-            } else {
-                log.warn("Invalid or missing questionType field");
-                return null;
-            }
-
-            return dto;
-        } catch (Exception e) {
-            log.error("Error parsing single question", e);
-            return null;
+    @Override
+    public boolean deleteQuestions(String fileId) {
+        if (!questionRepository.findByFileId(fileId).isEmpty()) {
+            questionRepository.deleteByFileId(fileId);
+            log.info("Deleted questions for fileId {}", fileId);
+            return true;
         }
+        return false;
     }
 }

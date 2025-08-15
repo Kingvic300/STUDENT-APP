@@ -107,12 +107,14 @@ public class FileTextExtractionServiceImpl implements FileTextExtractionService 
 
     private ReadDocumentResponse readExcelFile(MultipartFile file) {
         StringBuilder content = new StringBuilder();
+        DataFormatter formatter = new DataFormatter();
+
         try (Workbook workbook = WorkbookFactory.create(file.getInputStream())) {
             for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
                 Sheet sheet = workbook.getSheetAt(i);
                 for (Row row : sheet) {
                     for (Cell cell : row) {
-                        content.append(cell.toString()).append("\t");
+                        content.append(formatter.formatCellValue(cell)).append("\t");
                     }
                     content.append("\n");
                 }
@@ -120,9 +122,12 @@ public class FileTextExtractionServiceImpl implements FileTextExtractionService 
         } catch (Exception e) {
             log.error("Error reading Excel file: {}", e.getMessage(), e);
             throw new DocumentNotReadException("Error while reading study material");
-
         }
-        return StudyMaterialMapper.mapToReadDocumentResponse(content.toString(), "Excel file was read successfully");
+
+        return StudyMaterialMapper.mapToReadDocumentResponse(
+                content.toString(),
+                "Excel file was read successfully"
+        );
     }
 
     private ReadDocumentResponse readWordDocument(MultipartFile file) {

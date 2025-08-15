@@ -21,4 +21,18 @@ public class StudyMaterialMapper {
         response.setMessage(message);
         return response;
     }
+    public static SummarizedContentResponse mapToSummarizedContentResponse(String summary, String message){
+        SummarizedContentResponse response = new SummarizedContentResponse();
+        response.setSummary(summary);
+        response.setMessage(message);
+        return response;
+    }
+    public static AnalyzedContentResponse mapToAnalyzedContentResponse(String analyzed, String message){
+        AnalyzedContentResponse response = new AnalyzedContentResponse();
+        response.setAnalyzed(analyzed);
+        response.setMessage(message);
+        return response;
+    }
+
+
 }

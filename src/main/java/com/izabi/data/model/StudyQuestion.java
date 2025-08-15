@@ -29,11 +29,7 @@ public class StudyQuestion {
     private String explanation;
     private String topic;
     private Difficulty difficulty;
-    private int timesAnswered;
-    private int timesCorrect;
-    private double successRate;
     private LocalDateTime createdAt;
     private boolean isActive;
-    private String lastUserAnswer;
-    private boolean wasLastAnswerCorrect;
+
 }

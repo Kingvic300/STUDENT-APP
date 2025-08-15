@@ -1,19 +1,22 @@
 package com.izabi.service;
 
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.izabi.mapper.StudyMaterialMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.izabi.exception.AIAnalysisException;
+import com.izabi.exception.*;
+import com.izabi.dto.response.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
+
 @Service
 @Slf4j
-public class OpenAIServiceImpl implements OpenAIService {
+public class AIServiceImpl implements AIService {
     @Value("${spring.ai.openai.api-key}")
     private String openAiApiKey;
 
@@ -24,14 +27,15 @@ public class OpenAIServiceImpl implements OpenAIService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public Map<String, Object> analyzeContent(String text) {
+    public AnalyzedContentResponse analyzeContent(String text) {
         try {
             log.info("Starting OpenAI analysis for Computer Science content");
 
             String prompt = createAnalysisPrompt(text);
             String response = callOpenAI(prompt);
+            String analyzed = parseAnalysisResponse(response);
 
-            return parseAnalysisResponse(response);
+            return StudyMaterialMapper.mapToAnalyzedContentResponse(analyzed, "Content successfully analyzed");
 
         } catch (Exception e) {
             log.error("OpenAI analysis failed: {}", e.getMessage());
@@ -40,18 +44,35 @@ public class OpenAIServiceImpl implements OpenAIService {
     }
 
     @Override
-    public Map<String, Object> summarizeContent(String text) {
+    public SummarizedContentResponse summarizeContent(String text) {
         try {
             log.info("Starting OpenAI summarization");
 
             String prompt = createSummaryPrompt(text);
             String response = callOpenAI(prompt);
+            String summary = parseSummaryResponse(response);
 
-            return parseSummaryResponse(response);
+            return StudyMaterialMapper.mapToSummarizedContentResponse(summary,"Summary Completed");
 
         } catch (Exception e) {
             log.error("OpenAI summarization failed: {}", e.getMessage());
             throw new AIAnalysisException("Failed to summarize content with OpenAI: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public String generateQuestions(String text) {
+        try {
+            log.info("Starting OpenAI question generation");
+
+            String prompt = createQuestionGenerationPrompt(text);
+            String response = callOpenAI(prompt);
+
+            return extractContentFromOpenAIResponse(response);
+
+        } catch (Exception e) {
+            log.error("OpenAI question generation failed: {}", e.getMessage());
+            throw new AIAnalysisException("Failed to generate questions with OpenAI: " + e.getMessage(), e);
         }
     }
 
@@ -75,17 +96,53 @@ public class OpenAIServiceImpl implements OpenAIService {
         """, contentToSummarize);
     }
 
-    private Map<String, Object> parseSummaryResponse(String response) {
+    private String createQuestionGenerationPrompt(String text) {
+        String contentToUse;
+        if (text.length() > 3000) {
+            contentToUse = text.substring(0, 3000) + "...";
+        } else {
+            contentToUse = text;
+        }
+
+        return String.format("""
+        Generate a list of 5–10 study questions based on the following educational content.
+        Return the result strictly as a JSON array of objects with this structure:
+        [
+            {
+                "question": "The study question text",
+                "options": ["Option A", "Option B", "Option C", "Option D"],
+                "answer": "The correct option"
+            }
+        ]
+        
+        Content:
+        %s
+        """, contentToUse);
+    }
+
+    private String extractContentFromOpenAIResponse(String apiResponse) {
+        try {
+            JsonNode jsonNode = objectMapper.readTree(apiResponse);
+            return jsonNode.path("choices").get(0).path("message").path("content").asText();
+        } catch (Exception e) {
+            log.error("Failed to parse OpenAI response body", e);
+            throw new AIAnalysisException("Invalid OpenAI API response format", e);
+        }
+    }
+
+    private String parseSummaryResponse(String response) {
         try {
             JsonNode jsonNode = objectMapper.readTree(response);
             String content = jsonNode.path("choices").get(0).path("message").path("content").asText();
-            Map<String, Object> parsedResponse = objectMapper.readValue(content, Map.class);
-            return parsedResponse;
+
+            JsonNode contentNode = objectMapper.readTree(content);
+            return contentNode.path("summary").asText();
         } catch (Exception e) {
             log.warn("Failed to parse OpenAI summary response, returning fallback summary: {}", e.getMessage());
-            return Map.of("summary", "A brief summary of the educational content.");
+            return "A brief summary of the educational content.";
         }
     }
+
 
     private String callOpenAI(String prompt) {
         HttpHeaders headers = new HttpHeaders();
@@ -93,7 +150,7 @@ public class OpenAIServiceImpl implements OpenAIService {
         headers.setBearerAuth(openAiApiKey);
 
         Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("model", "gpt-4");
+        requestBody.put("model", "gpt-4o");
         requestBody.put("messages", List.of(
                 Map.of("role", "user", "content", prompt)
         ));
@@ -106,20 +163,35 @@ public class OpenAIServiceImpl implements OpenAIService {
         return response.getBody();
     }
 
-    private Map<String, Object> parseAnalysisResponse(String response) {
+    private String parseAnalysisResponse(String response) {
         try {
             JsonNode jsonNode = objectMapper.readTree(response);
-            String content = jsonNode.path("choices").get(0).path("message").path("content").asText();
-            Map<String , Object> parseResponse = new HashMap<>();
-            parseResponse.put("jsonNode", objectMapper.readValue(content, Map.class));
 
-            return parseResponse;
+            return jsonNode
+                    .path("choices")
+                    .get(0)
+                    .path("message")
+                    .path("content")
+                    .asText(); // Returning raw JSON string from OpenAI
 
+        } catch (JsonProcessingException e) {
+            log.warn("Failed to parse OpenAI analysis response (JSON error), using fallback: {}", e.getMessage());
+            try {
+                return objectMapper.writeValueAsString(createFallbackAnalysis());
+            } catch (JsonProcessingException ex) {
+                throw new RuntimeException("Failed to serialize fallback analysis", ex);
+            }
         } catch (Exception e) {
-            log.warn("Failed to parse OpenAI response as JSON, using fallback: {}", e.getMessage());
-            return createFallbackAnalysis();
+            log.warn("Unexpected error parsing OpenAI analysis response, using fallback: {}", e.getMessage());
+            try {
+                return objectMapper.writeValueAsString(createFallbackAnalysis());
+            } catch (JsonProcessingException ex) {
+                throw new RuntimeException("Failed to serialize fallback analysis", ex);
+            }
         }
     }
+
+
 
     private Map<String, Object> createFallbackAnalysis() {
         return Map.of(
@@ -132,6 +204,7 @@ public class OpenAIServiceImpl implements OpenAIService {
                 "contentType", "LECTURE_NOTES"
         );
     }
+
     private String createAnalysisPrompt(String text) {
         String contentToAnalyze;
 
