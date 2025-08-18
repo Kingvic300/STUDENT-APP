@@ -34,7 +34,7 @@ public class ApplicationConfiguration {
     @Bean
     public UserDetailsService userDetailsService() {
         return email -> userRepository.findByEmail(email)
-                .orElseThrow(() -> new EmailNotFoundException("User not found with email: " + email));
+                .orElseThrow(() -> new EmailNotFoundException("No user not found with email: " + email));
     }
     @Bean
     public PasswordEncoder passwordEncoder() {
