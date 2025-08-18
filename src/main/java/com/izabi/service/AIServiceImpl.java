@@ -7,6 +7,7 @@ import com.izabi.dto.response.AnalyzedContentResponse;
 import com.izabi.dto.response.SummarizedContentResponse;
 import com.izabi.exception.AIAnalysisException;
 import com.izabi.mapper.StudyMaterialMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -20,6 +21,7 @@ import java.util.*;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class AIServiceImpl implements AIService {
 
     private final RestTemplate restTemplate;
@@ -40,9 +42,6 @@ public class AIServiceImpl implements AIService {
     @Value("${gemini.model:gemini-1.5-flash}")
     private String geminiModel;
 
-    public AIServiceImpl() {
-        this.restTemplate = new RestTemplate();
-    }
 
     @Override
     @Retryable(value = {Exception.class}, maxAttempts = 3, backoff = @Backoff(delay = 1000, multiplier = 2))
