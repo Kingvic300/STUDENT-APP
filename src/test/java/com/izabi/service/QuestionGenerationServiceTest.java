@@ -78,14 +78,14 @@ class QuestionGenerationServiceImplTest {
                         .question("What is Object-Oriented Programming?")
                         .questionType(QuestionType.valueOf("MULTIPLE_CHOICE"))
                         .options(Arrays.asList("A programming paradigm", "A database", "A framework", "An IDE"))
-                        .correctAnswer("A programming paradigm")
+                        .answer("A programming paradigm")
                         .difficulty(Difficulty.valueOf("BEGINNER"))
                         .build(),
                 StudyQuestionResponse.builder()
                         .question("Name three pillars of OOP")
                         .questionType(QuestionType.valueOf("SHORT_ANSWER"))
                         .options(Collections.emptyList())
-                        .correctAnswer("Encapsulation, Inheritance, Polymorphism")
+                        .answer("Encapsulation, Inheritance, Polymorphism")
                         .difficulty(Difficulty.valueOf("INTERMEDIATE"))
                         .build()
         );
@@ -256,7 +256,7 @@ class QuestionGenerationServiceImplTest {
         assertEquals("1", firstQuestion.getId());
         assertEquals("What is Object-Oriented Programming?", firstQuestion.getQuestion());
         assertEquals("MULTIPLE_CHOICE", String.valueOf(firstQuestion.getQuestionType()));
-        assertEquals("A programming paradigm", firstQuestion.getCorrectAnswer());
+        assertEquals("A programming paradigm", firstQuestion.getAnswer());
         assertEquals("BEGINNER", String.valueOf(firstQuestion.getDifficulty()));
         assertNull(firstQuestion.getExplanation());
         assertNull(firstQuestion.getTopic());
