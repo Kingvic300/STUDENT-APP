@@ -24,7 +24,7 @@ import java.util.List;
 public class StudyAppServiceImpl implements StudyAppService {
 
     private final FileTextExtractionService fileTextExtractionService;
-    private final AIService AIService;
+    private final AIService aiService;
     private final QuestionGenerationService questionGenerationService;
     private final StudyMaterialRepository studyMaterialRepository;
     private final StudyQuestionRepository studyQuestionRepository;
@@ -36,9 +36,9 @@ public class StudyAppServiceImpl implements StudyAppService {
         }
         ReadDocumentResponse extracted = fileTextExtractionService.navigateToProperFileExtension(file);
 
-        SummarizedContentResponse summaryResponse = AIService.summarizeContent(extracted.getText());
+        SummarizedContentResponse summaryResponse = aiService.summarizeContent(extracted.getText());
 
-        AnalyzedContentResponse analysisResponse = AIService.analyzeContent(extracted.getText());
+        AnalyzedContentResponse analysisResponse = aiService.analyzeContent(extracted.getText());
 
         List<StudyQuestionResponse> generatedQuestions =
                 questionGenerationService.generateQuestionsFromFile(file.getOriginalFilename(), file);
