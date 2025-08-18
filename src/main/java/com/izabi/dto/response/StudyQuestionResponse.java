@@ -19,7 +19,7 @@ public class StudyQuestionResponse {
     private String question;
     private QuestionType questionType;
     private List<String> options;
-    private String correctAnswer;
+    private String answer;
     private String explanation;
     private String topic;
     private Difficulty difficulty;

@@ -4,6 +4,7 @@ import com.izabi.data.repository.UserRepository;
 import com.izabi.exception.EmailNotFoundException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -26,6 +27,9 @@ import java.util.Properties;
 public class ApplicationConfiguration {
 
     private final UserRepository userRepository;
+
+    @Value("${spring.mail.password}")
+    private String appPassword;
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -70,7 +74,7 @@ public class ApplicationConfiguration {
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
         mailSender.setUsername("oladimejivictor611@gmail.com");
-        mailSender.setPassword("ypbl kohs jouh phxa ");
+        mailSender.setPassword(appPassword);
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.smtp.auth", true);

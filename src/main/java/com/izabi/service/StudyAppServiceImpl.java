@@ -63,7 +63,7 @@ public class StudyAppServiceImpl implements StudyAppService {
             entity.setStudyMaterialId(studyMaterial.getId());
             entity.setQuestion(q.getQuestion());
             entity.setOptions(q.getOptions());
-            entity.setCorrectAnswer(q.getCorrectAnswer());
+            entity.setCorrectAnswer(q.getAnswer());
             entity.setExplanation(q.getExplanation());
             entity.setTopic(q.getTopic());
             entity.setDifficulty(q.getDifficulty() != null ? q.getDifficulty() : Difficulty.BEGINNER);

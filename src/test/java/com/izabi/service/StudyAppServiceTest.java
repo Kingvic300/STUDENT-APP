@@ -73,7 +73,7 @@ class StudyAppServiceImplTest {
         StudyQuestionResponse questionResponse = new StudyQuestionResponse();
         questionResponse.setQuestion("What is Java?");
         questionResponse.setOptions(List.of("Lang1", "Lang2"));
-        questionResponse.setCorrectAnswer("Lang1");
+        questionResponse.setAnswer("Lang1");
         questionResponse.setExplanation("Explanation");
         questionResponse.setTopic("Programming");
         questionResponse.setDifficulty(Difficulty.BEGINNER);

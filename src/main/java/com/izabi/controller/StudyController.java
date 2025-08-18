@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/v1/study")
+@RequestMapping("/study")
 @Slf4j
 @RequiredArgsConstructor
 public class StudyController {
