@@ -88,12 +88,12 @@ class StudyAppServiceImplTest {
         when(studyMaterialRepository.save(any(StudyMaterial.class))).thenReturn(savedMaterial);
 
         // Execute
-        StudyMaterialRequest result = studyAppService.generateStudyMaterial(mockFile);
+        StudyMaterialResponse result = studyAppService.generateStudyMaterial(mockFile);
 
         // Assertions
         assertNotNull(result);
         assertEquals("Summary text", result.getSummary());
-        assertEquals(List.of("Key points"), result.getKeyPoints());
+        assertEquals(List.of("Key points"), result.getKeypoint());
         assertEquals(1, result.getQuestions().size());
         assertEquals("What is Java?", result.getQuestions().get(0).getQuestion());
 
