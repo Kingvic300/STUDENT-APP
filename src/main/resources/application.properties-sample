@@ -29,3 +29,16 @@ spring.security.oauth2.client.registration.google.client-id=enter your google id
 spring.security.oauth2.client.registration.google.client-secret=enter your google secret key
 spring.security.oauth2.client.registration.google.redirect-uri=http://localhost:8000/login/oauth2/code/google
 spring.security.oauth2.client.registration.google.scope=openid,email,profile
+
+
+spring.ai.openai.api-key=enter your open ai api key
+openai.api.url=https://api.openai.com/v1/chat/completions
+deepseek.api.key=sk-enter your deepseek api key
+deepseek.api.url=https://api.deepseek.com/chat/completions
+deepseek.model=deepseek-chat
+deepseek.max-tokens=1000
+deepseek.temperature=0.3
+grok.ai.api.key=enter your grok api key
+gemini.api.key=enter your gemini api key
+gemini.base-url=https://generativelanguage.googleapis.com/v1beta
+gemini.model=gemini-1.5-flash

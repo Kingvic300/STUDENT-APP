@@ -112,15 +112,12 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = existingUser.get();
-
         if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             throw new InvalidPasswordException("Invalid password");
         }
-
         if (!user.isActive()) {
             throw new IsNotActiveException("User is not active");
         }
-
         if(loginRequest.getRole() != null && !loginRequest.getRole().equals(user.getRole())) {
             throw new InvalidRoleException("Invalid role for user");
         }
@@ -134,7 +131,6 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = getAuthentication();
 
         String email = authentication.getName();
-        log.error(email);
         Optional<User> existingUser = userRepository.findByEmail(email);
         if (existingUser.isEmpty()) {
             throw new UserNotFoundException("User not found with username");
@@ -144,7 +140,7 @@ public class UserServiceImpl implements UserService {
             throw new IsNotActiveException("Account has been deactivated");
         }
         UserMapper.mapToUpdateProfile(updateUserProfileRequest, user);
-
+        user.setPassword(passwordEncoder.encode(updateUserProfileRequest.getPassword()));
         userRepository.save(user);
         var token = jwtTokenUtil.generateToken(user);
         return UserMapper.mapToUpdateUserProfileResponse(token, "User profile updated successfully");
@@ -353,10 +349,6 @@ public class UserServiceImpl implements UserService {
 
         try {
             EmbeddingResponse voicePrint = voiceAuthenticationService.extractVoiceFeatures(request.getVoiceSample());
-
-
-
-
             if(voicePrint.getEmbedding() == null){
                 throw new VoiceProcessingFailedException("voice cannot be null");
             }
