@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-@Document(collection = "pdfs")
+@Document(collection = "material")
 public class StudyMaterial {
     @Id
     private String id;

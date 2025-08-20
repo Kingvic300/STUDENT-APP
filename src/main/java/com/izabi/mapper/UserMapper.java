@@ -5,8 +5,14 @@ import com.izabi.dto.request.CreateUserRequest;
 import com.izabi.dto.request.UpdateUserProfileRequest;
 import com.izabi.dto.response.*;
 import com.izabi.util.EmailVerification;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDateTime;
+
+@RequiredArgsConstructor
 public class UserMapper {
+
     public static User mapToUser(CreateUserRequest createUserRequest) {
         User user = new User();
         user.setPassword(createUserRequest.getPassword());
@@ -17,11 +23,12 @@ public class UserMapper {
     public static void mapToUpdateProfile(UpdateUserProfileRequest updateUserProfileRequest, User user) {
         user.setFirstName(updateUserProfileRequest.getFirstName());
         user.setLastName(updateUserProfileRequest.getLastName());
-        user.setEmail(updateUserProfileRequest.getEmail());
         user.setPhoneNumber(updateUserProfileRequest.getPhoneNumber());
-        user.setRole(updateUserProfileRequest.getRoles());
         user.setLocation(updateUserProfileRequest.getLocation());
         user.setProfilePicturePath(updateUserProfileRequest.getProfilePicturePath());
+        user.setInstitution(updateUserProfileRequest.getInstitution());
+        user.setMajor(updateUserProfileRequest.getMajor());
+        user.setUpdatedAt(LocalDateTime.now());
         user.setActive(user.isActive());
     }
     public static UpdateUserProfileResponse mapToUpdateUserProfileResponse(String token, String message) {

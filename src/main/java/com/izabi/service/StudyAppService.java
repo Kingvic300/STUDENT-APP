@@ -1,8 +1,8 @@
 package com.izabi.service;
 
-import com.izabi.dto.request.StudyMaterialRequest;
+import com.izabi.dto.response.StudyMaterialResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface StudyAppService {
-    StudyMaterialRequest generateStudyMaterial(MultipartFile file);
+    StudyMaterialResponse generateStudyMaterial(MultipartFile file);
 }

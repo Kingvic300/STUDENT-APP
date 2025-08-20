@@ -48,11 +48,9 @@ public class AIServiceImpl implements AIService {
     public AnalyzedContentResponse analyzeContent(String text) {
         try {
             log.info("Starting Gemini AI analysis for content (length: {} chars)", text.length());
-
             if (text.trim().isEmpty()) {
                 throw new AIAnalysisException("Content cannot be empty");
             }
-
             String prompt = createAnalysisPrompt(text);
             String response = callGeminiAPI(prompt);
             String analyzed = parseAnalysisResponse(response);
@@ -65,12 +63,10 @@ public class AIServiceImpl implements AIService {
             if (isQuotaError(e)) {
                 throw new AIAnalysisException("Gemini AI service quota exceeded. Please check your Google Cloud billing and try again later.", e);
             }
-
             if (enableFallbacks) {
                 log.warn("Using fallback analysis due to error: {}", e.getMessage());
                 return createFallbackAnalyzedResponse();
             }
-
             throw new AIAnalysisException("Failed to analyze content: " + e.getMessage(), e);
         }
     }
@@ -140,7 +136,6 @@ public class AIServiceImpl implements AIService {
         }
     }
 
-    // ---------- Gemini API Integration ----------
     private String callGeminiAPI(String prompt) {
         String url = String.format("%s/models/%s:generateContent?key=%s",
                 geminiBaseUrl, geminiModel, geminiApiKey);
@@ -148,6 +143,36 @@ public class AIServiceImpl implements AIService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
+        HttpEntity<Map<String, Object>> entity = getMapHttpEntity(prompt, headers);
+
+        try {
+            log.debug("Calling Gemini API with prompt length: {}", prompt.length());
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                return extractGeminiResponse(response.getBody());
+            } else {
+                throw new RuntimeException("Gemini API returned status: " + response.getStatusCode());
+            }
+        } catch (HttpClientErrorException e) {
+            log.error("Gemini API HTTP error: {} - {}", e.getStatusCode(), e.getResponseBodyAsString());
+
+            if (e.getStatusCode() == HttpStatus.TOO_MANY_REQUESTS) {
+                throw new RuntimeException("Gemini API rate limit exceeded", e);
+            } else if (e.getStatusCode() == HttpStatus.FORBIDDEN) {
+                throw new RuntimeException("Gemini API access denied - check API key and permissions", e);
+            } else if (e.getStatusCode() == HttpStatus.BAD_REQUEST) {
+                throw new RuntimeException("Invalid request to Gemini API", e);
+            }
+
+            throw new RuntimeException("Gemini API call failed: " + e.getStatusCode() + " " + e.getResponseBodyAsString(), e);
+        } catch (Exception e) {
+            log.error("Gemini API call failed: {}", e.getMessage());
+            throw new RuntimeException("Failed to call Gemini API", e);
+        }
+    }
+
+    private static HttpEntity<Map<String, Object>> getMapHttpEntity(String prompt, HttpHeaders headers) {
         Map<String, Object> requestBody = Map.of(
                 "contents", List.of(
                         Map.of(
@@ -182,41 +207,13 @@ public class AIServiceImpl implements AIService {
                 )
         );
 
-        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
-
-        try {
-            log.debug("Calling Gemini API with prompt length: {}", prompt.length());
-            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-
-            if (response.getStatusCode().is2xxSuccessful()) {
-                return extractGeminiResponse(response.getBody());
-            } else {
-                throw new RuntimeException("Gemini API returned status: " + response.getStatusCode());
-            }
-        } catch (HttpClientErrorException e) {
-            log.error("Gemini API HTTP error: {} - {}", e.getStatusCode(), e.getResponseBodyAsString());
-
-            // Handle specific Gemini error codes
-            if (e.getStatusCode() == HttpStatus.TOO_MANY_REQUESTS) {
-                throw new RuntimeException("Gemini API rate limit exceeded", e);
-            } else if (e.getStatusCode() == HttpStatus.FORBIDDEN) {
-                throw new RuntimeException("Gemini API access denied - check API key and permissions", e);
-            } else if (e.getStatusCode() == HttpStatus.BAD_REQUEST) {
-                throw new RuntimeException("Invalid request to Gemini API", e);
-            }
-
-            throw new RuntimeException("Gemini API call failed: " + e.getStatusCode() + " " + e.getResponseBodyAsString(), e);
-        } catch (Exception e) {
-            log.error("Gemini API call failed: {}", e.getMessage());
-            throw new RuntimeException("Failed to call Gemini API", e);
-        }
+        return new HttpEntity<>(requestBody, headers);
     }
 
-    private String extractGeminiResponse(String response) throws JsonProcessingException {
+    private String extractGeminiResponse(String response){
         try {
             JsonNode responseNode = objectMapper.readTree(response);
 
-            // Check for error in response
             if (responseNode.has("error")) {
                 JsonNode error = responseNode.get("error");
                 String errorMessage = error.path("message").asText();
@@ -226,7 +223,7 @@ public class AIServiceImpl implements AIService {
 
             JsonNode candidates = responseNode.path("candidates");
 
-            if (candidates.isArray() && candidates.size() > 0) {
+            if (candidates.isArray() && !candidates.isEmpty()) {
                 JsonNode firstCandidate = candidates.get(0);
                 JsonNode content = firstCandidate.path("content");
                 JsonNode parts = content.path("parts");
@@ -234,7 +231,6 @@ public class AIServiceImpl implements AIService {
                 if (parts.isArray() && !parts.isEmpty()) {
                     String text = parts.get(0).path("text").asText();
 
-                    // Check finish reason
                     String finishReason = firstCandidate.path("finishReason").asText();
                     if ("MAX_TOKENS".equals(finishReason)) {
                         log.warn("Gemini response was truncated due to length limit");
@@ -256,8 +252,6 @@ public class AIServiceImpl implements AIService {
             throw new RuntimeException("Failed to parse Gemini API response", e);
         }
     }
-
-    // ---------- Content Processing ----------
     private String truncateContent(String text) {
         if (text.length() <= maxContentLength) {
             return text;
@@ -267,7 +261,6 @@ public class AIServiceImpl implements AIService {
         return text.substring(0, maxContentLength) + "...";
     }
 
-    // ---------- Prompts ----------
     private String createSummaryPrompt(String text) {
         String contentToSummarize = truncateContent(text);
         return String.format("""
@@ -329,17 +322,18 @@ public class AIServiceImpl implements AIService {
             """, contentToAnalyze);
     }
 
-    // ---------- Response parsing ----------
     private String cleanJsonResponse(String response) {
         if (response == null || response.trim().isEmpty()) {
             throw new AIAnalysisException("Empty response from AI service");
         }
 
-        // Remove markdown formatting if present
         String cleaned = response.replaceAll("```json", "").replaceAll("```", "").trim();
 
-        // Log the cleaned response for debugging (be careful with sensitive data)
-        log.debug("Cleaned AI response: {}", cleaned.length() > 200 ? cleaned.substring(0, 200) + "..." : cleaned);
+        if (cleaned.length() > 200) {
+            log.debug("Cleaned AI response: {}...", cleaned.substring(0, 200));
+        } else {
+            log.debug("Cleaned AI response: {}", cleaned);
+        }
 
         return cleaned;
     }
@@ -354,7 +348,6 @@ public class AIServiceImpl implements AIService {
                 throw new RuntimeException("No summary found in response");
             }
 
-            // Validate summary quality
             if (summary.length() < 10) {
                 log.warn("Summary appears too short: {}", summary);
             }
@@ -391,6 +384,7 @@ public class AIServiceImpl implements AIService {
             throw new AIAnalysisException("Failed to parse analysis response", e);
         } catch (Exception e) {
             log.warn("Unexpected error parsing AI analysis response: {}", e.getMessage());
+
             if (enableFallbacks) {
                 try {
                     return objectMapper.writeValueAsString(createFallbackAnalysis());
@@ -427,7 +421,6 @@ public class AIServiceImpl implements AIService {
         }
     }
 
-    // ---------- Validation methods ----------
     private void validateAnalysisFields(JsonNode node) {
         String[] requiredFields = {"summary", "keyTopics", "keyTerms", "difficulty", "estimatedReadingTimeMinutes", "courseSubject", "contentType"};
 
@@ -471,7 +464,6 @@ public class AIServiceImpl implements AIService {
         }
     }
 
-    // ---------- Fallback methods ----------
     private AnalyzedContentResponse createFallbackAnalyzedResponse() {
         try {
             String fallbackJson = objectMapper.writeValueAsString(createFallbackAnalysis());

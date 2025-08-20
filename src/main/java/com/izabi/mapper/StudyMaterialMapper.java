@@ -1,6 +1,12 @@
 package com.izabi.mapper;
 
+import com.izabi.data.model.StudyMaterial;
+import com.izabi.data.model.StudyQuestion;
 import com.izabi.dto.response.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class StudyMaterialMapper {
     public static FileExtensionResponse mapToFileExtensionResponse(String extension, String message){
@@ -33,6 +39,32 @@ public class StudyMaterialMapper {
         response.setMessage(message);
         return response;
     }
-
-
+    public static StudyMaterialResponse mapToStudyMaterialResponse(
+            String summary, List<String> keypoint, List<StudyQuestion> questions, String message){
+        StudyMaterialResponse studyMaterialResponse = new StudyMaterialResponse();
+        studyMaterialResponse.setKeypoint(keypoint);
+        studyMaterialResponse.setQuestions(questions);
+        studyMaterialResponse.setSummary(summary);
+        studyMaterialResponse.setMessage(message);
+        return studyMaterialResponse;
+    }
+    public static StudyMaterial mapToStudyMaterial(
+            MultipartFile file,
+            FileExtensionResponse fileExt,
+            PageCountResponse pageCount,
+            ReadDocumentResponse extracted,
+            SummarizedContentResponse summaryResponse,
+            AnalyzedContentResponse analysisResponse
+            ){
+        StudyMaterial studyMaterial = new StudyMaterial();
+        studyMaterial.setFileName(file.getOriginalFilename());
+        studyMaterial.setFileExtension(fileExt.getFileExtension());
+        studyMaterial.setNumberOfPages(pageCount.getNumberOfPages());
+        studyMaterial.setExtractedText(extracted.getText());
+        studyMaterial.setSummary(summaryResponse.getSummary());
+        studyMaterial.setKeyPoints(List.of(analysisResponse.getAnalyzed()));
+        studyMaterial.setActive(true);
+        studyMaterial.setUploadDate(LocalDateTime.now());
+        return studyMaterial;
+    }
 }
