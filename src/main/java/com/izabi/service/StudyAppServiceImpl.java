@@ -46,7 +46,7 @@ public class StudyAppServiceImpl implements StudyAppService {
 
         StudyMaterial studyMaterial = StudyMaterialMapper
                 .mapToStudyMaterial(file, fileExt,pageCount,extracted,summaryResponse,analysisResponse);
-        studyMaterial = studyMaterialRepository.save(studyMaterial);
+        studyMaterialRepository.save(studyMaterial);
 
         List<StudyQuestion> questionList = new ArrayList<>();
         for (StudyQuestionResponse questions : generatedQuestions) {
@@ -76,7 +76,7 @@ public class StudyAppServiceImpl implements StudyAppService {
         studyQuestionRepository.saveAll(questionList);
 
         return StudyMaterialMapper.mapToStudyMaterialResponse(
-                studyMaterial.getSummary(), studyMaterial.getKeyPoints(), questionList, "Generated Study Material"
+                summaryResponse.getSummary(), studyMaterial.getKeyPoints(), questionList, "Generated Study Material"
 
         );
     }
