@@ -42,9 +42,8 @@ public class AIServiceImpl implements AIService {
     @Value("${gemini.model:gemini-1.5-flash}")
     private String geminiModel;
 
-
     @Override
-    @Retryable(value = {Exception.class}, maxAttempts = 3, backoff = @Backoff(delay = 1000, multiplier = 2))
+    @Retryable(retryFor = {Exception.class}, maxAttemptsExpression = "3", backoff = @Backoff(delay = 1000, multiplier = 2))
     public AnalyzedContentResponse analyzeContent(String text) {
         try {
             log.info("Starting Gemini AI analysis for content (length: {} chars)", text.length());
@@ -72,7 +71,7 @@ public class AIServiceImpl implements AIService {
     }
 
     @Override
-    @Retryable(value = {Exception.class}, maxAttempts = 3, backoff = @Backoff(delay = 1000, multiplier = 2))
+    @Retryable(retryFor = {Exception.class},maxAttemptsExpression = "3", backoff = @Backoff(delay = 1000, multiplier = 2))
     public SummarizedContentResponse summarizeContent(String text) {
         try {
             log.info("Starting Gemini AI summarization (length: {} chars)", text.length());
@@ -105,7 +104,7 @@ public class AIServiceImpl implements AIService {
     }
 
     @Override
-    @Retryable(value = {Exception.class}, maxAttempts = 3, backoff = @Backoff(delay = 1000, multiplier = 2))
+    @Retryable(retryFor = {Exception.class}, maxAttemptsExpression = "3", backoff = @Backoff(delay = 1000, multiplier = 2))
     public String generateQuestions(String text) {
         try {
             log.info("Starting Gemini AI question generation (length: {} chars)", text.length());
@@ -114,9 +113,9 @@ public class AIServiceImpl implements AIService {
                 throw new AIAnalysisException("Content cannot be empty");
             }
 
-            String prompt = createQuestionGenerationPrompt(text);
+            String prompt = createEnhancedQuestionGenerationPrompt(text);
             String response = callGeminiAPI(prompt);
-            String questions = parseQuestionResponse(response);
+            String questions = parseEnhancedQuestionResponse(response);
 
             log.info("Gemini AI question generation completed successfully");
             return questions;
@@ -129,7 +128,7 @@ public class AIServiceImpl implements AIService {
 
             if (enableFallbacks) {
                 log.warn("Using fallback questions due to error: {}", e.getMessage());
-                return createFallbackQuestions();
+                return createEnhancedFallbackQuestions();
             }
 
             throw new AIAnalysisException("Failed to generate questions: " + e.getMessage(), e);
@@ -183,7 +182,7 @@ public class AIServiceImpl implements AIService {
                 ),
                 "generationConfig", Map.of(
                         "temperature", 0.7,
-                        "maxOutputTokens", 2048,
+                        "maxOutputTokens", 4096,
                         "topP", 0.8,
                         "topK", 10
                 ),
@@ -252,6 +251,7 @@ public class AIServiceImpl implements AIService {
             throw new RuntimeException("Failed to parse Gemini API response", e);
         }
     }
+
     private String truncateContent(String text) {
         if (text.length() <= maxContentLength) {
             return text;
@@ -277,26 +277,46 @@ public class AIServiceImpl implements AIService {
             """, contentToSummarize);
     }
 
-    private String createQuestionGenerationPrompt(String text) {
+    private String createEnhancedQuestionGenerationPrompt(String text) {
         String contentToUse = truncateContent(text);
-        return String.format("""
-            You are an expert educator. Generate 5-8 multiple choice study questions based on the following educational content.
-            Questions should test understanding of key concepts, not just memorization.
-            Make sure each question has exactly 4 options and one correct answer.
-            
-            IMPORTANT: Return ONLY a JSON array with this exact structure (no additional text, no markdown formatting):
-            [
-                {
-                    "question": "The study question text",
-                    "options": ["Option A", "Option B", "Option C", "Option D"],
-                    "answer": "The correct option (must match one of the options exactly)"
-                }
-            ]
+        return """
+        You are an expert educator. Generate 5-8 study questions based on the following educational content.
+        Create a mix of MULTIPLE_CHOICE and THEORY questions that test understanding of key concepts.
+        
+        For MULTIPLE_CHOICE questions: Include 4 options with one correct answer and explanation.
+        For THEORY questions: Create open-ended questions that require detailed explanations.
+        
+        IMPORTANT: Return ONLY a JSON array with this exact structure (no additional text, no markdown formatting):
+        [
+            {
+                "type": "MULTIPLE_CHOICE",
+                "question": "The study question text",
+                "topic": "The main topic this question covers",
+                "difficulty": "BEGINNER or INTERMEDIATE or ADVANCED",
+                "options": ["Option A", "Option B", "Option C", "Option D"],
+                "answer": "The correct option (must match one of the options exactly)",
+                "explanation": "Detailed explanation of why this is the correct answer and why other options are incorrect"
+            },
+            {
+                "type": "THEORY",
+                "question": "The open-ended theory question",
+                "topic": "The main topic this question covers",
+                "difficulty": "BEGINNER or INTERMEDIATE or ADVANCED",
+                "explanation": "Sample answer or key points that should be covered in a good response"
+            }
+        ]
 
-            Content:
-            %s
-            """, contentToUse);
+        Guidelines:
+        - Mix both question types (aim for 60% MULTIPLE_CHOICE, 40% THEORY)
+        - Ensure questions test understanding, not just memorization
+        - Difficulty should match the complexity of the concept being tested
+        - Topics should be specific to the content areas
+        - Explanations should be educational and comprehensive
+
+        Content:
+        """ + contentToUse;
     }
+
 
     private String createAnalysisPrompt(String text) {
         String contentToAnalyze = truncateContent(text);
@@ -396,7 +416,7 @@ public class AIServiceImpl implements AIService {
         }
     }
 
-    private String parseQuestionResponse(String response) {
+    private String parseEnhancedQuestionResponse(String response) {
         try {
             String cleanedResponse = cleanJsonResponse(response);
             JsonNode questionsNode = objectMapper.readTree(cleanedResponse);
@@ -406,18 +426,18 @@ public class AIServiceImpl implements AIService {
             }
 
             for (JsonNode questionNode : questionsNode) {
-                validateQuestionStructure(questionNode);
+                validateEnhancedQuestionStructure(questionNode);
             }
 
-            log.info("Successfully parsed {} questions", questionsNode.size());
+            log.info("Successfully parsed {} enhanced questions", questionsNode.size());
             return cleanedResponse;
 
         } catch (Exception e) {
-            log.warn("Failed to parse questions response: {}", e.getMessage());
+            log.warn("Failed to parse enhanced questions response: {}", e.getMessage());
             if (enableFallbacks) {
-                return createFallbackQuestions();
+                return createEnhancedFallbackQuestions();
             }
-            throw new AIAnalysisException("Failed to parse questions response", e);
+            throw new AIAnalysisException("Failed to parse enhanced questions response", e);
         }
     }
 
@@ -436,8 +456,8 @@ public class AIServiceImpl implements AIService {
         }
     }
 
-    private void validateQuestionStructure(JsonNode questionNode) {
-        String[] requiredFields = {"question", "options", "answer"};
+    private void validateEnhancedQuestionStructure(JsonNode questionNode) {
+        String[] requiredFields = {"type", "question", "topic", "difficulty", "explanation"};
 
         for (String field : requiredFields) {
             if (!questionNode.has(field)) {
@@ -445,22 +465,38 @@ public class AIServiceImpl implements AIService {
             }
         }
 
-        JsonNode optionsNode = questionNode.path("options");
-        if (!optionsNode.isArray() || optionsNode.size() != 4) {
-            throw new RuntimeException("Question must have exactly 4 options");
+        String questionType = questionNode.path("type").asText();
+        if (!Arrays.asList("MULTIPLE_CHOICE", "THEORY").contains(questionType)) {
+            throw new RuntimeException("Invalid question type: " + questionType);
         }
 
-        String correctAnswer = questionNode.path("answer").asText();
-        boolean answerFound = false;
-        for (JsonNode option : optionsNode) {
-            if (option.asText().equals(correctAnswer)) {
-                answerFound = true;
-                break;
+        String difficulty = questionNode.path("difficulty").asText();
+        if (!Arrays.asList("BEGINNER", "INTERMEDIATE", "ADVANCED").contains(difficulty)) {
+            log.warn("Invalid difficulty level in question: {}", difficulty);
+        }
+
+        if ("MULTIPLE_CHOICE".equals(questionType)) {
+            if (!questionNode.has("options") || !questionNode.has("answer")) {
+                throw new RuntimeException("MULTIPLE_CHOICE question missing options or answer");
             }
-        }
 
-        if (!answerFound) {
-            log.warn("Correct answer '{}' not found in options for question", correctAnswer);
+            JsonNode optionsNode = questionNode.path("options");
+            if (!optionsNode.isArray() || optionsNode.size() != 4) {
+                throw new RuntimeException("MULTIPLE_CHOICE question must have exactly 4 options");
+            }
+
+            String correctAnswer = questionNode.path("answer").asText();
+            boolean answerFound = false;
+            for (JsonNode option : optionsNode) {
+                if (option.asText().equals(correctAnswer)) {
+                    answerFound = true;
+                    break;
+                }
+            }
+
+            if (!answerFound) {
+                log.warn("Correct answer '{}' not found in options for question", correctAnswer);
+            }
         }
     }
 
@@ -485,27 +521,41 @@ public class AIServiceImpl implements AIService {
         );
     }
 
-    private String createFallbackQuestions() {
+    private String createEnhancedFallbackQuestions() {
         try {
             List<Map<String, Object>> fallbackQuestions = Arrays.asList(
                     Map.of(
+                            "type", "MULTIPLE_CHOICE",
                             "question", "Based on the content provided, which concept is most fundamental to understanding the subject matter?",
+                            "topic", "Core Concepts",
+                            "difficulty", "BEGINNER",
                             "options", Arrays.asList("Basic principles", "Advanced applications", "Historical context", "Future implications"),
-                            "answer", "Basic principles"
+                            "answer", "Basic principles",
+                            "explanation", "Basic principles form the foundation of any subject matter and must be understood before progressing to more complex topics. Advanced applications build upon these principles, while historical context and future implications provide additional perspective but are not fundamental to core understanding."
                     ),
                     Map.of(
+                            "type", "THEORY",
+                            "question", "Explain the importance of understanding fundamental concepts before moving to advanced applications in this subject area.",
+                            "topic", "Learning Methodology",
+                            "difficulty", "INTERMEDIATE",
+                            "explanation", "A good response should discuss how fundamental concepts provide the building blocks for advanced understanding, the risks of skipping foundational knowledge, and how proper sequencing of learning leads to better comprehension and retention. Students should also mention practical examples of how basic concepts apply to complex scenarios."
+                    ),
+                    Map.of(
+                            "type", "MULTIPLE_CHOICE",
                             "question", "What approach would be most effective for studying this material?",
+                            "topic", "Study Strategies",
+                            "difficulty", "BEGINNER",
                             "options", Arrays.asList("Memorization only", "Understanding concepts and applications", "Skipping difficult sections", "Reading once quickly"),
-                            "answer", "Understanding concepts and applications"
+                            "answer", "Understanding concepts and applications",
+                            "explanation", "Understanding concepts and applications is the most effective approach as it promotes deep learning and retention. Memorization only leads to superficial knowledge, skipping difficult sections creates knowledge gaps, and reading once quickly doesn't allow for proper comprehension and integration of information."
                     )
             );
 
             return objectMapper.writeValueAsString(fallbackQuestions);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Failed to create fallback questions", e);
+            throw new RuntimeException("Failed to create enhanced fallback questions", e);
         }
     }
-
     private boolean isQuotaError(Exception e) {
         String message = e.getMessage();
         return message != null && (
