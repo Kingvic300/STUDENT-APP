@@ -22,6 +22,7 @@ public class StudyMaterial {
     private String fileContent;
     private String fileExtension;
     private int fileSize;
+    private String userId;
     private int numberOfPages;
     private String extractedText;
     private String summary;
