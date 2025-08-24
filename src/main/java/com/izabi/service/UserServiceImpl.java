@@ -128,12 +128,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UpdateUserProfileResponse updateProfile(UpdateUserProfileRequest updateUserProfileRequest) {
-        Authentication authentication = getAuthentication();
-
-        String email = authentication.getName();
-        Optional<User> existingUser = userRepository.findByEmail(email);
+        Optional<User> existingUser = userRepository.findById(updateUserProfileRequest.getId());
         if (existingUser.isEmpty()) {
-            throw new UserNotFoundException("User not found with username");
+            throw new UserNotFoundException("User not found with id");
         }
         User user = existingUser.get();
         if (!user.isActive()) {
