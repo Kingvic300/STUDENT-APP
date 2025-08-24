@@ -137,7 +137,6 @@ public class UserServiceImpl implements UserService {
             throw new IsNotActiveException("Account has been deactivated");
         }
         UserMapper.mapToUpdateProfile(updateUserProfileRequest, user);
-        user.setPassword(passwordEncoder.encode(updateUserProfileRequest.getPassword()));
         userRepository.save(user);
         var token = jwtTokenUtil.generateToken(user);
         return UserMapper.mapToUpdateUserProfileResponse(token, "User profile updated successfully");
