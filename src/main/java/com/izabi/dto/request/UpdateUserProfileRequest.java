@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Data
 public class UpdateUserProfileRequest {
 
+    private String id;
     private String firstName;
     private String email;
     private String password;
