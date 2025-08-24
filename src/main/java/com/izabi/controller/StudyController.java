@@ -55,4 +55,12 @@ public class StudyController {
         List<StudyMaterialResponse> history = studyAppService.getStudyHistory(userId);
         return ResponseEntity.ok(history);
     }
+    @DeleteMapping("/history/{studyMaterialId}")
+    public ResponseEntity<Void> deleteStudyMaterial(
+            @PathVariable String studyMaterialId,
+            @RequestParam("userId") String userId) {
+
+        studyAppService.deleteStudyMaterial(studyMaterialId, userId);
+        return ResponseEntity.noContent().build();
+    }
 }

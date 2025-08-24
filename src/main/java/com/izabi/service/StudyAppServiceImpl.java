@@ -107,6 +107,24 @@ public class StudyAppServiceImpl implements StudyAppService {
 
         return responses;
     }
+    @Override
+    public void deleteStudyMaterial(String studyMaterialId, String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        StudyMaterial material = studyMaterialRepository.findById(studyMaterialId)
+                .orElseThrow(() -> new NoFileFoundException("Study material not found"));
+
+        if (!material.getUserId().equals(user.getId())) {
+            throw new IllegalArgumentException("User not authorized to delete this study material");
+        }
+
+        List<StudyQuestion> questions = studyQuestionRepository.findByStudyMaterialId(material.getId());
+        studyQuestionRepository.deleteAll(questions);
+
+        studyMaterialRepository.delete(material);
+    }
+
 
 
     private void validateUserAndFile(MultipartFile file, String userId) {
