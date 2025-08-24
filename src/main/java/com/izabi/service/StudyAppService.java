@@ -15,4 +15,6 @@ public interface StudyAppService {
     StudyMaterialResponse generateStudyMaterial(MultipartFile file, String userId, int numberOfQuestions);
 
     List<StudyMaterialResponse> getStudyHistory(String userId);
+
+    void deleteStudyMaterial(String studyMaterialId, String userId);
 }
