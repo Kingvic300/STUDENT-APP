@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public class UpdateUserProfileRequest {
 
     private String firstName;
+    private String email;
     private String password;
     private String phoneNumber;
     private String lastName;
