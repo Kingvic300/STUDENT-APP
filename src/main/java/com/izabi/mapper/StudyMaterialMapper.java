@@ -40,7 +40,7 @@ public class StudyMaterialMapper {
         return response;
     }
     public static StudyMaterialResponse mapToStudyMaterialResponse(
-            String summary, List<String> keypoint, List<StudyQuestion> questions, String message){
+            String summary, List<String> keypoint, List<QuestionResponse> questions, String message){
         StudyMaterialResponse studyMaterialResponse = new StudyMaterialResponse();
         studyMaterialResponse.setKeypoint(keypoint);
         studyMaterialResponse.setQuestions(questions);
@@ -48,6 +48,7 @@ public class StudyMaterialMapper {
         studyMaterialResponse.setMessage(message);
         return studyMaterialResponse;
     }
+
     public static StudyMaterial mapToStudyMaterial(
             MultipartFile file,
             FileExtensionResponse fileExt,

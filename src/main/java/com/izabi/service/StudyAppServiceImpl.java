@@ -74,14 +74,26 @@ public class StudyAppServiceImpl implements StudyAppService {
 
         StudyMaterial studyMaterial = StudyMaterialMapper
                 .mapToStudyMaterial(file, fileExt, pageCount, extracted, summaryResponse, analysisResponse);
+        studyMaterial.setUserId(user.getId());
         studyMaterialRepository.save(studyMaterial);
 
-        // Map and save questions
         List<StudyQuestion> questionList = mapToEntities(generatedQuestions, studyMaterial.getId(), user.getId());
         studyQuestionRepository.saveAll(questionList);
 
+        List<QuestionResponse> questionResponses = questionList.stream()
+                .map(q -> new QuestionResponse(
+                        q.getId(),
+                        q.getQuestion(),
+                        q.getOptions(),
+                        q.getCorrectAnswer()
+                ))
+                .toList();
+
         return StudyMaterialMapper.mapToStudyMaterialResponse(
-                summaryResponse.getSummary(), studyMaterial.getKeyPoints(), questionList, "Generated Study Material"
+                summaryResponse.getSummary(),
+                studyMaterial.getKeyPoints(),
+                questionResponses,
+                "Generated Study Material"
         );
     }
     @Override
@@ -96,17 +108,28 @@ public class StudyAppServiceImpl implements StudyAppService {
         for (StudyMaterial material : studyMaterials) {
             List<StudyQuestion> questions = studyQuestionRepository.findByStudyMaterialId(material.getId());
 
-            StudyMaterialResponse response = StudyMaterialMapper.mapToStudyMaterialResponse(
-                    material.getSummary(),
+            List<QuestionResponse> questionResponses = questions.stream()
+                    .map(q -> new QuestionResponse(
+                            q.getId(),
+                            q.getQuestion(),
+                            q.getOptions(),
+                            q.getCorrectAnswer()
+                    ))
+                    .toList();
+
+            StudyMaterialResponse response = StudyMaterialMapper.mapToStudyMaterialResponse(material.getSummary(),
                     material.getKeyPoints(),
-                    questions,
-                    "History Record"
-            );
+                    questionResponses,
+                    "History Record");
+
+
             responses.add(response);
         }
 
         return responses;
     }
+
+
     @Override
     public void deleteStudyMaterial(String studyMaterialId, String userId) {
         User user = userRepository.findById(userId)

@@ -6,10 +6,11 @@ import lombok.Data;
 import java.util.List;
 
 @Data
+
 public class StudyMaterialResponse {
     private String summary;
     private List<String> keypoint;
-    private List<StudyQuestion> questions;
+    private List<QuestionResponse> questions;
     private String message;
 
 }
