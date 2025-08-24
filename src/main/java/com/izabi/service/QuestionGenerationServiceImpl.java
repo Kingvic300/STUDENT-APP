@@ -20,23 +20,21 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class QuestionGenerationServiceImpl implements QuestionGenerationService {
 
-    private final AIService AIService;
+    private final AIService aiService;
     private final FileTextExtractionService fileTextExtractionService;
     private final QuestionRepository questionRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
-
     @Override
-    public List<StudyQuestionResponse> generateQuestionsFromFile(String fileId, MultipartFile file) {
+    public List<StudyQuestionResponse> generateQuestionsFromFile(String fileId, MultipartFile file, int numberOfQuestions) {
         try {
             ReadDocumentResponse readResponse = fileTextExtractionService.navigateToProperFileExtension(file);
             String extractedText = readResponse.getText();
 
-            String aiResponse = AIService.generateQuestions(extractedText);
+            String aiResponse = aiService.generateQuestions(extractedText, numberOfQuestions);
 
             List<StudyQuestionResponse> studyQuestions = objectMapper.readValue(
                     aiResponse,
-                    new TypeReference<>() {
-                    }
+                    new TypeReference<>() {}
             );
 
             List<Question> questionEntities = studyQuestions.stream()

@@ -103,17 +103,17 @@ public class AIServiceImpl implements AIService {
         }
     }
 
-    @Override
     @Retryable(retryFor = {Exception.class}, maxAttemptsExpression = "3", backoff = @Backoff(delay = 1000, multiplier = 2))
-    public String generateQuestions(String text) {
+    @Override
+    public String generateQuestions(String text, int numberOfQuestions) {
         try {
-            log.info("Starting Gemini AI question generation (length: {} chars)", text.length());
+            log.info("Starting Gemini AI question generation (length: {} chars) for {} questions", text.length(), numberOfQuestions);
 
             if (text.trim().isEmpty()) {
                 throw new AIAnalysisException("Content cannot be empty");
             }
 
-            String prompt = createEnhancedQuestionGenerationPrompt(text);
+            String prompt = createEnhancedQuestionGenerationPrompt(text, numberOfQuestions);
             String response = callGeminiAPI(prompt);
             String questions = parseEnhancedQuestionResponse(response);
 
@@ -134,6 +134,45 @@ public class AIServiceImpl implements AIService {
             throw new AIAnalysisException("Failed to generate questions: " + e.getMessage(), e);
         }
     }
+
+    private String createEnhancedQuestionGenerationPrompt(String text, int numberOfQuestions) {
+        String contentToUse = truncateContent(text);
+
+        return "You are an expert educator. Generate " + numberOfQuestions + " study questions based on the following educational content.\n"
+                + "Create a mix of MULTIPLE_CHOICE and THEORY questions that test understanding of key concepts.\n\n"
+                + "For MULTIPLE_CHOICE questions: Include 4 options with one correct answer and explanation.\n"
+                + "For THEORY questions: Create open-ended questions that require detailed explanations.\n\n"
+                + "IMPORTANT: Return ONLY a JSON array with this exact structure (no additional text, no markdown formatting):\n"
+                + "[\n"
+                + "    {\n"
+                + "        \"type\": \"MULTIPLE_CHOICE\",\n"
+                + "        \"question\": \"The study question text\",\n"
+                + "        \"topic\": \"The main topic this question covers\",\n"
+                + "        \"difficulty\": \"BEGINNER or INTERMEDIATE or ADVANCED\",\n"
+                + "        \"options\": [\"Option A\", \"Option B\", \"Option C\", \"Option D\"],\n"
+                + "        \"answer\": \"The correct option (must match one of the options exactly)\",\n"
+                + "        \"explanation\": \"Detailed explanation of why this is the correct answer and why other options are incorrect\"\n"
+                + "    },\n"
+                + "    {\n"
+                + "        \"type\": \"THEORY\",\n"
+                + "        \"question\": \"The open-ended theory question\",\n"
+                + "        \"topic\": \"The main topic this question covers\",\n"
+                + "        \"difficulty\": \"BEGINNER or INTERMEDIATE or ADVANCED\",\n"
+                + "        \"explanation\": \"Sample answer or key points that should be covered in a good response\"\n"
+                + "    }\n"
+                + "]\n\n"
+                + "Guidelines:\n"
+                + "- Mix both question types (aim for 60% MULTIPLE_CHOICE, 40% THEORY)\n"
+                + "- Ensure questions test understanding, not just memorization\n"
+                + "- Difficulty should match the complexity of the concept being tested\n"
+                + "- Topics should be specific to the content areas\n"
+                + "- Explanations should be educational and comprehensive\n\n"
+                + "Content:\n"
+                + contentToUse;
+    }
+
+
+
 
     private String callGeminiAPI(String prompt) {
         String url = String.format("%s/models/%s:generateContent?key=%s",
@@ -277,45 +316,6 @@ public class AIServiceImpl implements AIService {
             """, contentToSummarize);
     }
 
-    private String createEnhancedQuestionGenerationPrompt(String text) {
-        String contentToUse = truncateContent(text);
-        return """
-        You are an expert educator. Generate 5-8 study questions based on the following educational content.
-        Create a mix of MULTIPLE_CHOICE and THEORY questions that test understanding of key concepts.
-        
-        For MULTIPLE_CHOICE questions: Include 4 options with one correct answer and explanation.
-        For THEORY questions: Create open-ended questions that require detailed explanations.
-        
-        IMPORTANT: Return ONLY a JSON array with this exact structure (no additional text, no markdown formatting):
-        [
-            {
-                "type": "MULTIPLE_CHOICE",
-                "question": "The study question text",
-                "topic": "The main topic this question covers",
-                "difficulty": "BEGINNER or INTERMEDIATE or ADVANCED",
-                "options": ["Option A", "Option B", "Option C", "Option D"],
-                "answer": "The correct option (must match one of the options exactly)",
-                "explanation": "Detailed explanation of why this is the correct answer and why other options are incorrect"
-            },
-            {
-                "type": "THEORY",
-                "question": "The open-ended theory question",
-                "topic": "The main topic this question covers",
-                "difficulty": "BEGINNER or INTERMEDIATE or ADVANCED",
-                "explanation": "Sample answer or key points that should be covered in a good response"
-            }
-        ]
-
-        Guidelines:
-        - Mix both question types (aim for 60% MULTIPLE_CHOICE, 40% THEORY)
-        - Ensure questions test understanding, not just memorization
-        - Difficulty should match the complexity of the concept being tested
-        - Topics should be specific to the content areas
-        - Explanations should be educational and comprehensive
-
-        Content:
-        """ + contentToUse;
-    }
 
 
     private String createAnalysisPrompt(String text) {
