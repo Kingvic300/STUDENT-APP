@@ -1,5 +1,6 @@
 package com.izabi.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.izabi.data.enums.Difficulty;
 import com.izabi.data.enums.QuestionType;
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class StudyQuestionResponse {
     private String id;
     private String question;
