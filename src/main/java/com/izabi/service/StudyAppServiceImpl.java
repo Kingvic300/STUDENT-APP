@@ -46,7 +46,6 @@ public class StudyAppServiceImpl implements StudyAppService {
     public List<StudyQuestionResponse> generateQuestions(MultipartFile file, String userId, int numberOfQuestions) {
         validateUserAndFile(file, userId);
 
-        // Call service that generates N questions
         return questionGenerationService.generateQuestionsFromFile(
                 file.getOriginalFilename(),
                 file,
@@ -90,19 +89,22 @@ public class StudyAppServiceImpl implements StudyAppService {
                 .toList();
 
         return StudyMaterialMapper.mapToStudyMaterialResponse(
+                studyMaterial.getId(),
+                studyMaterial.getFileName(),
                 summaryResponse.getSummary(),
                 studyMaterial.getKeyPoints(),
                 questionResponses,
+                studyMaterial.getCreatedAt(),
                 "Generated Study Material"
         );
     }
+
     @Override
     public List<StudyMaterialResponse> getStudyHistory(String userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         List<StudyMaterial> studyMaterials = studyMaterialRepository.findByUserId(user.getId());
-
         List<StudyMaterialResponse> responses = new ArrayList<>();
 
         for (StudyMaterial material : studyMaterials) {
@@ -117,18 +119,21 @@ public class StudyAppServiceImpl implements StudyAppService {
                     ))
                     .toList();
 
-            StudyMaterialResponse response = StudyMaterialMapper.mapToStudyMaterialResponse(material.getSummary(),
+            StudyMaterialResponse response = StudyMaterialMapper.mapToStudyMaterialResponse(
+                    material.getId(),
+                    material.getFileName(),
+                    material.getSummary(),
                     material.getKeyPoints(),
                     questionResponses,
-                    "History Record");
-
+                    material.getCreatedAt(),
+                    "History Record"
+            );
 
             responses.add(response);
         }
 
         return responses;
     }
-
 
     @Override
     public void deleteStudyMaterial(String studyMaterialId, String userId) {
@@ -148,8 +153,6 @@ public class StudyAppServiceImpl implements StudyAppService {
         studyMaterialRepository.delete(material);
     }
 
-
-
     private void validateUserAndFile(MultipartFile file, String userId) {
         if (file == null || file.isEmpty()) {
             throw new NoFileFoundException("File is empty");
@@ -159,7 +162,9 @@ public class StudyAppServiceImpl implements StudyAppService {
         }
     }
 
-    private List<StudyQuestion> mapToEntities(List<StudyQuestionResponse> generatedQuestions, String studyMaterialId, String userId) {
+    private List<StudyQuestion> mapToEntities(List<StudyQuestionResponse> generatedQuestions,
+                                              String studyMaterialId,
+                                              String userId) {
         List<StudyQuestion> questionList = new ArrayList<>();
         for (StudyQuestionResponse q : generatedQuestions) {
             StudyQuestion entity = new StudyQuestion();

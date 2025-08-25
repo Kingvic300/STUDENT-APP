@@ -41,5 +41,8 @@ public class StudyMaterial {
 
     @Indexed
     private String uploadedBy;
+    private LocalDateTime createdAt;
     private LocalDateTime lastAccessedDate;
 }
+
+

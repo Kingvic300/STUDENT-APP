@@ -40,14 +40,25 @@ public class StudyMaterialMapper {
         return response;
     }
     public static StudyMaterialResponse mapToStudyMaterialResponse(
-            String summary, List<String> keypoint, List<QuestionResponse> questions, String message){
+            String id,
+            String fileName,
+            String summary,
+            List<String> keyPoints,
+            List<QuestionResponse> questions,
+            LocalDateTime createdAt,
+            String message
+    ) {
         StudyMaterialResponse studyMaterialResponse = new StudyMaterialResponse();
-        studyMaterialResponse.setKeypoint(keypoint);
-        studyMaterialResponse.setQuestions(questions);
+        studyMaterialResponse.setId(id);
+        studyMaterialResponse.setFileName(fileName);
         studyMaterialResponse.setSummary(summary);
+        studyMaterialResponse.setKeyPoints(keyPoints);
+        studyMaterialResponse.setQuestions(questions);
+        studyMaterialResponse.setCreatedAt(createdAt);
         studyMaterialResponse.setMessage(message);
         return studyMaterialResponse;
     }
+
 
     public static StudyMaterial mapToStudyMaterial(
             MultipartFile file,
