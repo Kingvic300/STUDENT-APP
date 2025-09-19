@@ -321,26 +321,49 @@ public class AIServiceImpl implements AIService {
     private String createAnalysisPrompt(String text) {
         String contentToAnalyze = truncateContent(text);
         return String.format("""
-            You are an expert educational content analyst. Analyze this educational content thoroughly.
-            Identify the main subject, difficulty level, key concepts, and important terms.
-            
-            IMPORTANT: Return ONLY a JSON object with this exact structure (no additional text, no markdown formatting):
-            {
-                "summary": "A concise 2-3 sentence summary of the main concepts",
-                "keyTopics": ["topic1", "topic2", "topic3"],
-                "keyTerms": ["term1", "term2", "term3", "term4", "term5"],
-                "difficulty": "BEGINNER or INTERMEDIATE or ADVANCED",
-                "estimatedReadingTimeMinutes": 15,
-                "courseSubject": "The main subject area of the content",
-                "contentType": "LECTURE_NOTES or TEXTBOOK or ASSIGNMENT or REFERENCE"
-            }
-            
-            Provide accurate information based on the content analysis.
-            
-            Content to analyze:
-            %s
-            """, contentToAnalyze);
+        You are an expert educational content analyst. Analyze this educational content thoroughly.
+        Identify the main subject, difficulty level, key concepts, and important terms.
+
+        IMPORTANT: Return ONLY a JSON object with this exact structure (no additional text, no markdown formatting):
+        {
+            "summary": "A concise 2-3 sentence summary of the main concepts",
+            "keyTopics": ["topic1", "topic2", "topic3"],
+            "keyTerms": ["term1", "term2", "term3", "term4", "term5"],
+            "difficulty": "BEGINNER or INTERMEDIATE or ADVANCED",
+            "estimatedReadingTimeMinutes": 15,
+            "courseSubject": "The main subject area of the content",
+            "contentType": "LECTURE_NOTES or TEXTBOOK or ASSIGNMENT or REFERENCE",
+            "questions": [
+                {
+                    "id": 1,
+                    "type": "MULTIPLE_CHOICE",
+                    "question": "Question text here",
+                    "options": ["option A", "option B", "option C", "option D"],
+                    "correctOptionIndex": 0,
+                    "explanation": "One-sentence explanation why the correct option is correct"
+                }
+                /* Repeat for each question */
+            ]
+        }
+
+        Rules for the QUESTIONS array (STRICT - must be followed):
+        1. Produce ONLY MULTIPLE_CHOICE questions (no short answer, no true/false). Set "type" to "MULTIPLE_CHOICE".
+        2. Generate exactly 5 questions unless otherwise instructed. Each question MUST have exactly 4 options.
+        3. "correctOptionIndex" MUST be a zero-based integer (0..3) that points to the correct option.
+        4. Questions should cover different keyTopics returned above where possible.
+        5. Distractors (incorrect options) must be plausible, non-contradictory, and similar in length/complexity to the correct option.
+        6. Provide a brief 1-2 sentence "explanation" that justifies the correct option (useful for feedback).
+        7. Match question difficulty to the inferred "difficulty" field (BEGINNER, INTERMEDIATE, or ADVANCED).
+        8. Ensure the final output is VALID JSON (no surrounding text, no Markdown, no extra comments, no trailing commas).
+        9. If the content is insufficient to generate 5 high-quality questions, generate as many as you can (minimum 1) and set an additional field "generatedQuestionCount": <number> at the same level as "questions".
+
+        Provide accurate, evidence-based items derived from the content.
+
+        Content to analyze:
+        %s
+        """, contentToAnalyze);
     }
+
 
     private String cleanJsonResponse(String response) {
         if (response == null || response.trim().isEmpty()) {

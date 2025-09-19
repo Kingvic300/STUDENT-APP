@@ -61,7 +61,7 @@ public class ApplicationConfiguration {
             @Override
             public void addCorsMappings(@NonNull CorsRegistry corsRegistry){
                 corsRegistry.addMapping("/**")
-                        .allowedOrigins("http://localhost:5173", "https://connectsphere.com", "https://izabi.vercel.app")
+                        .allowedOrigins("http://localhost:8080", "https://connectsphere.com", "https://izabi.vercel.app")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
