@@ -138,10 +138,8 @@ public class AIServiceImpl implements AIService {
     private String createEnhancedQuestionGenerationPrompt(String text, int numberOfQuestions) {
         String contentToUse = truncateContent(text);
 
-        return "You are an expert educator. Generate " + numberOfQuestions + " study questions based on the following educational content.\n"
-                + "Create a mix of MULTIPLE_CHOICE and THEORY questions that test understanding of key concepts.\n\n"
-                + "For MULTIPLE_CHOICE questions: Include 4 options with one correct answer and explanation.\n"
-                + "For THEORY questions: Create open-ended questions that require detailed explanations.\n\n"
+        return "You are an expert educator. Generate " + numberOfQuestions + " objective MULTIPLE_CHOICE questions based on the following educational content.\n"
+                + "Each question MUST include exactly 4 options, one correct answer, and a detailed explanation.\n\n"
                 + "IMPORTANT: Return ONLY a JSON array with this exact structure (no additional text, no markdown formatting):\n"
                 + "[\n"
                 + "    {\n"
@@ -151,28 +149,18 @@ public class AIServiceImpl implements AIService {
                 + "        \"difficulty\": \"BEGINNER or INTERMEDIATE or ADVANCED\",\n"
                 + "        \"options\": [\"Option A\", \"Option B\", \"Option C\", \"Option D\"],\n"
                 + "        \"answer\": \"The correct option (must match one of the options exactly)\",\n"
-                + "        \"explanation\": \"Detailed explanation of why this is the correct answer and why other options are incorrect\"\n"
-                + "    },\n"
-                + "    {\n"
-                + "        \"type\": \"THEORY\",\n"
-                + "        \"question\": \"The open-ended theory question\",\n"
-                + "        \"topic\": \"The main topic this question covers\",\n"
-                + "        \"difficulty\": \"BEGINNER or INTERMEDIATE or ADVANCED\",\n"
-                + "        \"explanation\": \"Sample answer or key points that should be covered in a good response\"\n"
+                + "        \"explanation\": \"Detailed explanation of why this is the correct answer and why the others are incorrect\"\n"
                 + "    }\n"
                 + "]\n\n"
                 + "Guidelines:\n"
-                + "- Mix both question types (aim for 60% MULTIPLE_CHOICE, 40% THEORY)\n"
-                + "- Ensure questions test understanding, not just memorization\n"
+                + "- ALL questions must be MULTIPLE_CHOICE (no theory or open-ended questions)\n"
+                + "- Generate exactly " + numberOfQuestions + " questions\n"
+                + "- Each question MUST have exactly 4 plausible options\n"
                 + "- Difficulty should match the complexity of the concept being tested\n"
-                + "- Topics should be specific to the content areas\n"
                 + "- Explanations should be educational and comprehensive\n\n"
                 + "Content:\n"
                 + contentToUse;
     }
-
-
-
 
     private String callGeminiAPI(String prompt) {
         String url = String.format("%s/models/%s:generateContent?key=%s",
@@ -326,7 +314,7 @@ public class AIServiceImpl implements AIService {
 
         IMPORTANT: Return ONLY a JSON object with this exact structure (no additional text, no markdown formatting):
         {
-            "summary": "A concise 2-3 sentence summary of the main concepts",
+            "summary": "A concise 2-3 paragraph summary of the main concepts",
             "keyTopics": ["topic1", "topic2", "topic3"],
             "keyTerms": ["term1", "term2", "term3", "term4", "term5"],
             "difficulty": "BEGINNER or INTERMEDIATE or ADVANCED",
