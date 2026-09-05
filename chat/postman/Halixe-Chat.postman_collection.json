@@ -1,0 +1,577 @@
+{
+  "info": {
+    "name": "Halixe Chat API",
+    "description": "REST API collection for the Halixe Chat service (conversations, messages, reactions, pinned messages, notifications, presence, huddles, file upload).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "b6f1a0f4-6c2b-4e0e-9c1a-4d0f6a7f2a11"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{jwt_token}}", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8080", "type": "string" },
+    { "key": "jwt_token", "value": "", "type": "string" },
+    { "key": "conversationId", "value": "", "type": "string" },
+    { "key": "userId", "value": "", "type": "string" },
+    { "key": "messageId", "value": "", "type": "string" },
+    { "key": "threadId", "value": "", "type": "string" },
+    { "key": "callId", "value": "", "type": "string" },
+    { "key": "notificationId", "value": "", "type": "string" },
+    { "key": "fileId", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Conversations",
+      "item": [
+        {
+          "name": "Create Conversation",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Project Alpha\",\n  \"type\": \"GROUP\",\n  \"visibility\": \"PRIVATE\",\n  \"membersId\": [\"{{userId}}\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/conversations/create-conversation",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "conversations", "create-conversation"]
+            },
+            "description": "type: DIRECT | CHANNEL | GROUP\nvisibility: PRIVATE | PUBLIC"
+          }
+        },
+        {
+          "name": "List Conversations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/conversations?page=0&size=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "conversations"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Conversation",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/conversations/{{conversationId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "conversations", "{{conversationId}}"]
+            }
+          }
+        },
+        {
+          "name": "List Members",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/conversations/{{conversationId}}/members",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "conversations", "{{conversationId}}", "members"]
+            }
+          }
+        },
+        {
+          "name": "Add Member",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"role\": \"MEMBER\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/conversations/{{conversationId}}/members",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "conversations", "{{conversationId}}", "members"]
+            },
+            "description": "role: OWNER | ADMIN | MEMBER"
+          }
+        },
+        {
+          "name": "Remove Member",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/conversations/{{conversationId}}/members/{{userId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "conversations", "{{conversationId}}", "members", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "Leave Conversation",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/conversations/{{conversationId}}/leave",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "conversations", "{{conversationId}}", "leave"]
+            }
+          }
+        },
+        {
+          "name": "Promote Member",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/conversations/{{conversationId}}/members/{{userId}}/promote",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "conversations", "{{conversationId}}", "members", "{{userId}}", "promote"]
+            }
+          }
+        },
+        {
+          "name": "Demote Member",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/conversations/{{conversationId}}/members/{{userId}}/demote",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "conversations", "{{conversationId}}", "members", "{{userId}}", "demote"]
+            }
+          }
+        },
+        {
+          "name": "Mute/Unmute Conversation",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/conversations/{{conversationId}}/mute?muted=true",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "conversations", "{{conversationId}}", "mute"],
+              "query": [
+                { "key": "muted", "value": "true" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Messages",
+      "item": [
+        {
+          "name": "Send Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"conversationId\": \"{{conversationId}}\",\n  \"content\": \"Hello there!\",\n  \"messageType\": \"TEXT\",\n  \"threadId\": null,\n  \"replyToMessageId\": null,\n  \"attachments\": []\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/messages",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "messages"]
+            },
+            "description": "messageType: TEXT | IMAGE | VIDEO | AUDIO | FILE | VOICE | SYSTEM. senderId is set server-side from the authenticated user."
+          }
+        },
+        {
+          "name": "Send Message with Attachment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"conversationId\": \"{{conversationId}}\",\n  \"content\": \"Check this file\",\n  \"messageType\": \"FILE\",\n  \"attachments\": [\n    {\n      \"fileId\": \"{{fileId}}\",\n      \"fileName\": \"document.pdf\",\n      \"mimeType\": \"application/pdf\",\n      \"size\": 102400,\n      \"url\": \"https://example.com/files/document.pdf\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/messages",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "messages"]
+            }
+          }
+        },
+        {
+          "name": "Edit Message",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Updated message content\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/messages/{{messageId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "messages", "{{messageId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Message",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/messages/{{messageId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "messages", "{{messageId}}"]
+            }
+          }
+        },
+        {
+          "name": "Get Message",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/conversations/{{conversationId}}/messages/{{messageId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "conversations", "{{conversationId}}", "messages", "{{messageId}}"]
+            }
+          }
+        },
+        {
+          "name": "List Messages",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/conversations/{{conversationId}}/messages?page=0&size=50&newestFirst=false",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "conversations", "{{conversationId}}", "messages"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "50" },
+                { "key": "newestFirst", "value": "false" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Recent Messages",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/conversations/{{conversationId}}/messages/recent",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "conversations", "{{conversationId}}", "messages", "recent"]
+            }
+          }
+        },
+        {
+          "name": "List Thread Replies",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/threads/{{threadId}}/replies?page=0&size=50",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "threads", "{{threadId}}", "replies"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "50" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List Replies To Message",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/messages/{{messageId}}/replies",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "messages", "{{messageId}}", "replies"]
+            }
+          }
+        },
+        {
+          "name": "Mark Message Read",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/conversations/{{conversationId}}/messages/{{messageId}}/read",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "conversations", "{{conversationId}}", "messages", "{{messageId}}", "read"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reactions",
+      "item": [
+        {
+          "name": "Toggle Reaction",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"emoji\": \"👍\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/messages/{{messageId}}/reactions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "messages", "{{messageId}}", "reactions"]
+            }
+          }
+        },
+        {
+          "name": "List Reactions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/messages/{{messageId}}/reactions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "messages", "{{messageId}}", "reactions"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pinned Messages",
+      "item": [
+        {
+          "name": "Pin Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messageId\": \"{{messageId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/conversations/{{conversationId}}/pinned",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "conversations", "{{conversationId}}", "pinned"]
+            }
+          }
+        },
+        {
+          "name": "Unpin Message",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/conversations/{{conversationId}}/pinned/{{messageId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "conversations", "{{conversationId}}", "pinned", "{{messageId}}"]
+            }
+          }
+        },
+        {
+          "name": "List Pinned Messages",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/conversations/{{conversationId}}/pinned",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "conversations", "{{conversationId}}", "pinned"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "List Notifications",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/notifications?page=0&size=20",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "notifications"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Count Unread Notifications",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/notifications/unread-count",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "notifications", "unread-count"]
+            }
+          }
+        },
+        {
+          "name": "Mark All Notifications Read",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/notifications/read-all",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "notifications", "read-all"]
+            }
+          }
+        },
+        {
+          "name": "Mark Notification Read",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/notifications/{{notificationId}}/read",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "notifications", "{{notificationId}}", "read"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Presence",
+      "item": [
+        {
+          "name": "Update Presence",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"ONLINE\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/presence",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "presence"]
+            },
+            "description": "status: ONLINE | OFFLINE | AWAY | DND"
+          }
+        },
+        {
+          "name": "Get Presence",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/presence/{{userId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "presence", "{{userId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Huddles",
+      "item": [
+        {
+          "name": "Initiate Huddle",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/conversations/{{conversationId}}/huddle",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "conversations", "{{conversationId}}", "huddle"]
+            }
+          }
+        },
+        {
+          "name": "Join Huddle",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/huddles/{{callId}}/join",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "huddles", "{{callId}}", "join"]
+            }
+          }
+        },
+        {
+          "name": "Decline Huddle",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/huddles/{{callId}}/decline",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "huddles", "{{callId}}", "decline"]
+            }
+          }
+        },
+        {
+          "name": "End Huddle",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/huddles/{{callId}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "huddles", "{{callId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Files",
+      "item": [
+        {
+          "name": "Upload File",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "file", "type": "file", "src": "" }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/files",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "files"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

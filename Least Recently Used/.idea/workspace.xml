@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3ee9d47b-4b3f-485a-af6f-379961f1898a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../Student-App/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/.idea/material_theme_project_new.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/StudentAssistantApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/configuration/ApplicationConfiguration.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/configuration/CloudinaryConfiguration.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/configuration/JwtAuthenticationFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/configuration/SecurityConfiguration.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/controller/HomeController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/controller/StudyController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/controller/UserController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/data/enums/AiAnalysisStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/data/enums/ContentType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/data/enums/Difficulty.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/data/enums/ProcessingStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/data/enums/QuestionType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/data/enums/Role.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/data/model/Embedding.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/data/model/OTP.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/data/model/Pdf.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/data/model/PendingUser.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/data/model/StudyMaterial.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/data/model/StudyQuestion.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/data/model/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/data/repository/EmbeddingRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/data/repository/OTPRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/data/repository/PdfRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/data/repository/PendingUserRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/data/repository/StudyMaterialRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/data/repository/StudyQuestionRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/data/repository/UserRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/request/ChangePasswordRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/request/CompleteVoiceRegistrationRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/request/CreatePdfRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/request/CreateUserRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/request/EnableVoiceAuthRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/request/GenerateQuestionsRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/request/GenerateStudyMaterialRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/request/GetStudyMaterialRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/request/LoginRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/request/NavigateToProperFileExtensionRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/request/QuestionAnswerRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/request/RegisterUserRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/request/ResetPasswordRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/request/SaveFileToDatabaseRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/request/StudyMaterialRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/request/SummarizeContentRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/request/UpdateUserProfileRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/request/VoiceEnrollRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/request/VoiceLoginRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/request/VoiceSignupRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/request/VoiceVerifyRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/response/AnalyzedContentResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/response/CreatedUserResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/response/DocumentAnalysisResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/response/DocumentUploadResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/response/EmbeddingResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/response/FileExtensionResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/response/FoundResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/response/GetKeyPointsResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/response/LoginResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/response/LogoutResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/response/OTPResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/response/PageCountResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/response/ProcessingStatusResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/response/PythonEmbeddingResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/response/ReadDocumentResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/response/ResetPasswordResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/response/StudyMaterialResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/response/StudyQuestionResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/response/SummarizedContentResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/response/UpdateUserProfileResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/response/UploadResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/response/VoiceAuthResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/dtos/response/VoiceRegistrationResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/AIAnalysisException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/AlreadyExistsException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/CannotGetPageCountException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/DocumentNotReadException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/EmailCannotBeBlankException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/EmailNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/EmailNotSentException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/FailedToExtractVoiceException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/FileExtensionNotSupportedException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/FileUploadException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/InactiveUserException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/InvalidEmailRegexException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/InvalidOtpException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/InvalidPasswordException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/InvalidRoleException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/InvalidVoiceInputException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/IsNotActiveException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/NoAuthenticatedUserException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/NoFileExtensionFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/NoFileFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/NoVoiceInputException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/OTPCannotBeBlankException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/PDFNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/UserNotFoundException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/VoiceAlreadyEnabledException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/VoiceAuthenticationException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/VoiceDoesNotMatchException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/exception/VoiceProcessingFailedException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/mapper/EmbeddingMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/mapper/OTPMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/mapper/PdfMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/mapper/StudyMaterialMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/mapper/StudyQuestionMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/mapper/UserMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/service/AIService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/service/AIServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/service/CloudinaryService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/service/CloudinaryServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/service/EmailService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/service/EmailServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/service/FileTextExtractionService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/service/FileTextExtractionServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/service/OTPService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/service/OTPServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/service/QuestionGenerationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/service/QuestionGenerationServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/service/StudyAppService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/service/StudyAppServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/service/TokenBlacklistService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/service/TokenBlacklistServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/service/UserService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/service/UserServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/service/VoiceAuthenticationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/service/VoiceAuthenticationServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/util/EmailVerification.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/util/JwtUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/util/MultipartInputStreamFileResource.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/java/com/izabi/util/OTPGenerator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/resources/application.properties-sample" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/main/resources/banner.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/test/java/com/izabi/StudentAssistantApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/test/resources/application-test.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/test/resources/sample.docx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/test/resources/sample.pdf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Student-App/src/test/resources/sample.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.gitattributes" beforeDir="false" afterPath="$PROJECT_DIR$/../Student-App/.gitattributes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../Student-App/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Dockerfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/StudentAssistantApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/configuration/ApplicationConfiguration.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/configuration/CloudinaryConfiguration.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/configuration/JwtAuthenticationFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/configuration/SecurityConfiguration.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/controller/HomeController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/controller/StudyController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/controller/UserController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/data/enums/AiAnalysisStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/data/enums/ContentType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/data/enums/Difficulty.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/data/enums/ProcessingStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/data/enums/QuestionType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/data/enums/Role.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/data/model/Embedding.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/data/model/OTP.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/data/model/PendingUser.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/data/model/Question.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/data/model/StudyMaterial.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/data/model/StudyQuestion.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/data/model/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/data/repository/EmbeddingRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/data/repository/OTPRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/data/repository/PendingUserRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/data/repository/QuestionRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/data/repository/StudyMaterialRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/data/repository/StudyQuestionRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/data/repository/UserRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/request/ChangePasswordRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/request/CompleteVoiceRegistrationRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/request/CreateUserRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/request/EnableVoiceAuthRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/request/LoginRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/request/QuestionAnswerRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/request/RegisterUserRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/request/ResetPasswordRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/request/StudyMaterialRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/request/UpdateUserProfileRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/request/VoiceEnrollRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/request/VoiceLoginRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/request/VoiceSignupRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/request/VoiceVerifyRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/response/AnalyzedContentResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/response/CreatedUserResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/response/DocumentAnalysisResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/response/DocumentUploadResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/response/EmbeddingResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/response/FileExtensionResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/response/FoundResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/response/LoginResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/response/LogoutResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/response/OTPResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/response/PageCountResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/response/ProcessingStatusResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/response/PythonEmbeddingResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/response/QuestionAnswerResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/response/QuestionResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/response/ReadDocumentResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/response/ResetPasswordResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/response/StudyMaterialResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/response/StudyQuestionResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/response/SummarizedContentResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/response/UpdateUserProfileResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/response/UploadResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/response/VoiceAuthResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/dto/response/VoiceRegistrationResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/AIAnalysisException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/AlreadyExistsException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/CannotGetPageCountException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/DocumentNotReadException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/EmailCannotBeBlankException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/EmailNotFoundException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/EmailNotSentException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/FailedToExtractVoiceException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/FileExtensionNotSupportedException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/FileUploadException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/InactiveUserException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/InvalidEmailRegexException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/InvalidOtpException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/InvalidPasswordException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/InvalidRoleException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/InvalidVoiceInputException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/IsNotActiveException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/NoAuthenticatedUserException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/NoFileExtensionFoundException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/NoFileFoundException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/NoVoiceInputException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/OTPCannotBeBlankException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/PDFNotFoundException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/UserNotFoundException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/VoiceAlreadyEnabledException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/VoiceAuthenticationException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/VoiceDoesNotMatchException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/exception/VoiceProcessingFailedException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/mapper/EmbeddingMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/mapper/OTPMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/mapper/StudyMaterialMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/mapper/UserMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/service/AIService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/service/AIServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/service/CloudinaryService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/service/CloudinaryServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/service/EmailService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/service/EmailServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/service/FileTextExtractionService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/service/FileTextExtractionServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/service/OTPService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/service/OTPServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/service/QuestionGenerationService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/service/QuestionGenerationServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/service/StudyAppService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/service/StudyAppServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/service/TokenBlacklistService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/service/TokenBlacklistServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/service/UserService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/service/UserServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/service/VoiceAuthenticationService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/service/VoiceAuthenticationServiceImpl.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/util/EmailVerification.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/util/JwtUtil.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/util/MultipartInputStreamFileResource.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/java/com/izabi/util/OTPGenerator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/resources/application-test.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/resources/application.properties-sample" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/main/resources/banner.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/izabi/StudentAssistantApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/izabi/service/AIServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/izabi/service/FileTextExtractionServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/izabi/service/QuestionGenerationServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/izabi/service/StudyAppServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/java/com/izabi/service/UserServiceImplTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/resources/application-test.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/resources/sample.docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/resources/sample.pdf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/test/resources/sample.xlsx" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="3CPEsf1WxwMYcmdipQK8ZOmEXwG" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/kingvic/Documents/Java-Project/LeastRecentlyUsed",
+    "onboarding.tips.debug.path": "/home/kingvic/Documents/Java-Project/Least Recently Used/src/Main.java"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Main" />
+      <module name="LeastRecentlyUsed" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26830.84" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3ee9d47b-4b3f-485a-af6f-379961f1898a" name="Changes" comment="" />
+      <created>1776279016451</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1776279016451</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
